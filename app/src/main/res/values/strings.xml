@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">NUMAD23Fa23_Group5</string>
+    <string name="keywordInputString">Keyword (required)</string>
+    <string name="canada_string">Canada</string>
+    <string name="usa_string">USA</string>
+    <string name="tv_country_string">Country to use (only US or CA)</string>
+
+    <string-array name="sortings_array">
+        <item>Top Sellers</item>
+        <item>Price Low to High</item>
+        <item>Price High to Low</item>
+        <item>Top Rated</item>
+        <item>Relevance</item>
+    </string-array>
+
 </resources>

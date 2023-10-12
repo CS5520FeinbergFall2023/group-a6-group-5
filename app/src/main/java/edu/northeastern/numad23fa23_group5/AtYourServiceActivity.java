@@ -2,10 +2,17 @@ package edu.northeastern.numad23fa23_group5;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatToggleButton;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AtYourServiceActivity extends AppCompatActivity {
+public class AtYourServiceActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private TextView tvResults;
 
@@ -26,9 +33,48 @@ public class AtYourServiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_at_you_service);
 
+//        //the toggle button for country
+//        AppCompatToggleButton toggleButton = findViewById(R.id.toggleCountry);
+//        // Set the text when the toggle button is first initialized
+//        toggleButton.setText("USA");
+//        // Set the text when the toggle button is in the "on" state
+//        toggleButton.setTextOn("USA");
+//        // Set the text when the toggle button is in the "off" state
+//        toggleButton.setTextOff("Canada");
+
         tvResults = findViewById(R.id.tvResults);
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(v -> performSearch());
+
+        //the dropdown for the sorting methods
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerSorting);
+        // Create an ArrayAdapter using the string array and a default spinner layout.
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.sortings_array,
+                android.R.layout.simple_spinner_item
+        );
+        // Specify the layout to use when the list of choices appears.
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner.
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        // An item is selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos).
+        Snackbar snackBar = Snackbar.make(view, "Item selected from dropdown: "+parent.getItemAtPosition(pos), Snackbar.LENGTH_SHORT);
+        snackBar.show();
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback.
+        // Callback method to be invoked when the selection disappears from this view.
+        // The selection can disappear for instance when touch is activated or when the adapter becomes empty.
     }
 
     private void performSearch() {
