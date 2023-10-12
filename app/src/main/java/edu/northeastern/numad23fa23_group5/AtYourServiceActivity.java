@@ -8,9 +8,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatToggleButton;
@@ -35,8 +38,18 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
 
     private TextView tvResults;
     private ProgressBar progressBar;
+    private EditText editTextKeyword;
+    private EditText editTextMinPrice;
+    private EditText editTextMaxPrice;
+    private CheckBox checkBoxIfCache;
 
     private Handler handler = new Handler();
+    private String keyword;
+    private String minPrice;
+    private String maxPrice;
+    private String sortType;
+    private String country;
+    private boolean ifDisableCache;
 
 
     @Override
@@ -45,6 +58,10 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         setContentView(R.layout.activity_at_you_service);
 
         tvResults = findViewById(R.id.tvResults);
+        editTextKeyword=findViewById(R.id.textInputKeyword);
+        editTextMinPrice=findViewById(R.id.minPriceEditText);
+        editTextMaxPrice=findViewById(R.id.maxPriceEditText);
+        checkBoxIfCache=findViewById(R.id.checkBoxCaching);
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +103,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         // An item is selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos).
         Snackbar snackBar = Snackbar.make(view, "Item selected from dropdown: "+parent.getItemAtPosition(pos), Snackbar.LENGTH_SHORT);
+        sortType=parent.getItemAtPosition(pos).toString();
         snackBar.show();
     }
 
@@ -97,8 +115,55 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
 
     private void performSearch()
     {
+        country=((ToggleButton)findViewById(R.id.toggleCountry)).isChecked()?"Canada":"USA";
+        //get user input
+        //keyword
+        keyword=editTextKeyword.getText().toString();
+        //check if search keyword is empty
+        if(keyword.isEmpty()||keyword.isBlank())
+        {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    View rootView = findViewById(android.R.id.content);
+                    Snackbar.make(rootView, "Search keyword cannot be empty.", Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        }
+        //min price
+        minPrice=editTextMinPrice.getText().toString();
+        //max price
+        maxPrice=editTextMaxPrice.getText().toString();
+        switch (sortType)
+        {
+            case "Top Sellers":
+                sortType=(country.equals("USA"))?"top_sellers":"priceSaving";
+                break;
+            case "Price Low to High":
+                sortType=(country.equals("USA"))?"price_low_to_high":"price-asc";
+                break;
+            case "Price High to Low":
+                sortType=(country.equals("USA"))?"price_high_to_low":"price-desc";
+                break;
+            case "Top Rated":
+                sortType=(country.equals("USA"))?"top_rated":"reviewAvgRating";
+                break;
+            case "Relevance":
+                sortType=(country.equals("USA"))?"best_match":"relevance";
+                break;
+        }
+        String sortTypeSearchKey=(country.equals("USA"))?"hd_sort":"sort";
+        ifDisableCache=checkBoxIfCache.isChecked();
+        Log.d("performSearchCountry",country);
+        Log.d("performSearchKeyword",keyword);
+        Log.d("performSearchMinPrice",minPrice);
+        Log.d("performSearchMaxPrice",maxPrice);
+        Log.d("performSearchSortType",sortType);
+        Log.d("performSearchSortKey",sortTypeSearchKey);
+        Log.d("performSearchNoCache", String.valueOf(ifDisableCache));
+
         try{
-            URL url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000"); // Replace with your API endpoint
+            URL url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
