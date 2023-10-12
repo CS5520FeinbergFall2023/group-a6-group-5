@@ -33,15 +33,6 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_at_you_service);
 
-//        //the toggle button for country
-//        AppCompatToggleButton toggleButton = findViewById(R.id.toggleCountry);
-//        // Set the text when the toggle button is first initialized
-//        toggleButton.setText("USA");
-//        // Set the text when the toggle button is in the "on" state
-//        toggleButton.setTextOn("USA");
-//        // Set the text when the toggle button is in the "off" state
-//        toggleButton.setTextOff("Canada");
-
         tvResults = findViewById(R.id.tvResults);
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(v -> performSearch());

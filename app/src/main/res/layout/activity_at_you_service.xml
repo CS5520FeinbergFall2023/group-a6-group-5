@@ -12,10 +12,23 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="30dp"
         android:text="Search"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/progress_loader"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxCaching"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+    <ProgressBar
+        android:id="@+id/progress_loader"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="visible" />
 
     <EditText
         android:id="@+id/textInputKeyword"
@@ -83,7 +96,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="30dp"
+        android:layout_marginVertical="20dp"
         android:text="Sorting"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -134,8 +147,8 @@
 
     </LinearLayout>
 
-    <RadioButton
-        android:id="@+id/radioButtonCaching"
+    <CheckBox
+        android:id="@+id/checkBoxCaching"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Disable Caching"
