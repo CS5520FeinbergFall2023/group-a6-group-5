@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="30dp"
         android:text="Search"
-        app:layout_constraintBottom_toTopOf="@+id/progress_loader"
+        app:layout_constraintBottom_toTopOf="@+id/progressLoader"
         app:layout_constraintTop_toBottomOf="@+id/checkBoxCaching"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
 
     <ProgressBar
-        android:id="@+id/progress_loader"
+        android:id="@+id/progressLoader"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +28,8 @@
         app:layout_constraintTop_toBottomOf="@+id/btnSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="visible" />
+        android:visibility="gone"
+        />
 
     <EditText
         android:id="@+id/textInputKeyword"
@@ -57,37 +58,37 @@
         app:layout_constraintBottom_toTopOf="@+id/spinnerSorting"
         android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/minPriceEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:inputType="numberDecimal"
-        android:layout_marginHorizontal="5dp"
-        android:layout_margin="10dp"
-        android:hint="Min Price"/>
+        <EditText
+            android:id="@+id/minPriceEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:layout_marginHorizontal="5dp"
+            android:layout_margin="10dp"
+            android:hint="Min Price"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="USD to"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="USD to"/>
 
-    <EditText
-        android:id="@+id/maxPriceEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:inputType="numberDecimal"
-        android:layout_marginHorizontal="5dp"
-        android:layout_margin="10dp"
-        android:hint="Max Price"/>
+        <EditText
+            android:id="@+id/maxPriceEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:layout_marginHorizontal="5dp"
+            android:layout_margin="10dp"
+            android:hint="Max Price"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="USD"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="USD"/>
 
     </LinearLayout>
 

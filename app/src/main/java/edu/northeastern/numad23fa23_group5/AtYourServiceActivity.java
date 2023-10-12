@@ -1,11 +1,14 @@
 package edu.northeastern.numad23fa23_group5;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -14,6 +17,10 @@ import androidx.appcompat.widget.AppCompatToggleButton;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +34,10 @@ import retrofit2.Response;
 public class AtYourServiceActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private TextView tvResults;
+    private ProgressBar progressBar;
+
+    private Handler handler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +46,23 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
 
         tvResults = findViewById(R.id.tvResults);
         Button btnSearch = findViewById(R.id.btnSearch);
-        btnSearch.setOnClickListener(v -> performSearch());
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show loading indicator
+                progressBar.setVisibility(View.VISIBLE);
+                // Start a new thread for the API call
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Perform API call
+                        performSearch();
+                    }
+                }).start();
+            }
+        });
+
+        progressBar=findViewById(R.id.progressLoader);
 
         //the dropdown for the sorting methods
         Spinner spinner = (Spinner) findViewById(R.id.spinnerSorting);
@@ -68,36 +95,46 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         // The selection can disappear for instance when touch is activated or when the adapter becomes empty.
     }
 
-    private void performSearch() {
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-
-        Map<String, String> parameter = new HashMap<>();
-        parameter.put("engine", "home_depot");
-        parameter.put("q", "chair");
-        parameter.put("api_key", "46b4efc39069e71e94b9df0cc639c4fb01951988f2a312425fdaf43cdf1b807d");
-
-        Log.d("AtYourServiceActivity", "About to hit the API...");
-        Call<ApiResponse> call = apiService.searchGoogle(parameter);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                Log.d("AtYourServiceActivity", "API responded with: " + response.code() + " " + response.message());
-                Log.d("API_RESPONSE", "Response: " + response.body());
-                if (response.isSuccessful()) {
-                    ApiResponse apiResponse = response.body();
-                    // process the apiResponse and update UI
-                    tvResults.setText(apiResponse.getResult());
-                } else {
-                    tvResults.setText("Error occurred: " + response.message());
+    private void performSearch()
+    {
+        try{
+            URL url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000"); // Replace with your API endpoint
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
                 }
-            }
+                bufferedReader.close();
+                final String response = stringBuilder.toString();
+                // Process the response on the main thread
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        View rootView = findViewById(android.R.id.content);
+                        // Process the response
+                        if (response != null) {
+                            Snackbar.make(rootView, "Success", Snackbar.LENGTH_SHORT).show();
+                            Log.d("performSearchSuccess",response);
+                        } else {
+                            // Handle null or error response
+                            Snackbar.make(rootView, "Fail", Snackbar.LENGTH_SHORT).show();
+                            Log.d("performSearchFail",response);
+                        }
+                        // Hide loading indicator
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("AtYourServiceActivity", "API call failed with: " + t.getMessage(), t);
-                tvResults.setText("Failure: " + t.getMessage());
+            } finally {
+                urlConnection.disconnect();
             }
-        });
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }
 
