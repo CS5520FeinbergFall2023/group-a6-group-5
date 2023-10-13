@@ -76,6 +76,7 @@
             android:id="@+id/imageViewThumbnail"
             android:layout_width="65dp"
             android:layout_height="65dp"
+            android:layout_margin="20dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
