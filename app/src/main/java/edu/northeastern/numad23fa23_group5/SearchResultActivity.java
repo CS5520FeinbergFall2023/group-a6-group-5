@@ -41,7 +41,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 Log.d("SearchResultActivity ", jsonObjectResponse.getJSONArray("products").toString());
                 JSONArray resultProducts = jsonObjectResponse.getJSONArray("products");
                 for (int i = 0; i < resultProducts.length(); i++) {
-                    JSONArray thumbnails=resultProducts.getJSONObject(i).getJSONArray("thumbnails");
+                    JSONArray thumbnails=resultProducts.getJSONObject(i).getJSONArray("thumbnails").getJSONArray(0);
                     String thumbnailURL=thumbnails.getString(0);
                     String imageURL=thumbnails.getString(thumbnails.length()-1);
                     String title=resultProducts.getJSONObject(i).getString("title");
@@ -50,7 +50,7 @@ public class SearchResultActivity extends AppCompatActivity {
                     float ratings=Float.parseFloat(resultProducts.getJSONObject(i).getString("rating"));
 
                     Log.d("SearchResultActivity", thumbnailURL);
-                    Log.d("SearchResultActivity", thumbnailURL);
+                    Log.d("SearchResultActivity", imageURL);
                     Log.d("SearchResultActivity", title);
                     Log.d("SearchResultActivity", brand);
                     Log.d("SearchResultActivity", price);
