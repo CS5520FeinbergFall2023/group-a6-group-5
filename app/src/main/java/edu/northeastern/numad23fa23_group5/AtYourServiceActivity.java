@@ -20,6 +20,9 @@ import androidx.appcompat.widget.AppCompatToggleButton;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -97,7 +100,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        //country toggle also change the currency
+        //country toggle also changes the currency
         toggleButtonCountry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,15 +242,24 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                 }
                 bufferedReader.close();
                 final String response = stringBuilder.toString();
-                // Process the response on the main thread
+                JSONObject jsonObjectResponse=new JSONObject(response);
+                Log.d("performSearchResponse",response);
+                Log.d("performSearchProductsPosition ", jsonObjectResponse.getJSONArray("products").toString());
+                JSONArray resultProducts=jsonObjectResponse.getJSONArray("products");
+                for (int i = 0; i < resultProducts.length(); i++) {
+                    Log.d("performSearchProductTitle",resultProducts.getJSONObject(i).getString("title"));
+                }
+                // Process the response on the main UI thread
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
                         View rootView = findViewById(android.R.id.content);
                         // Process the response
+                        // TODO: API error message format
                         if (response != null) {
                             Snackbar.make(rootView, "Success", Snackbar.LENGTH_SHORT).show();
                             Log.d("performSearchSuccess",response);
+
                         } else {
                             // Handle null or error response
                             Snackbar.make(rootView, "Fail", Snackbar.LENGTH_SHORT).show();
