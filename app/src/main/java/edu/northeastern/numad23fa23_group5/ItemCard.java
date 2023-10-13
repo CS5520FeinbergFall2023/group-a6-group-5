@@ -10,11 +10,17 @@ public class ItemCard {
     String imageURL;
     //title
     String title;
+    //brand
+    String brand;
     //ratings
     float ratings;
+
+//    boolean ifDeliver;
+//    boolean ifPickUp;
     //price
     //variants
     //TODO: delivery and pick up, not sure how many possible variations are there for these two
+    // and they need zipcode which is actually optional. Add them later if wanted.
     /* As far as I can see there're:
         --------------DILIVERY---------------
         "delivery":
@@ -35,4 +41,6 @@ public class ItemCard {
         OR
         this field of "pick up" won't exists if pickup is unavailable
      */
+
+
 }
