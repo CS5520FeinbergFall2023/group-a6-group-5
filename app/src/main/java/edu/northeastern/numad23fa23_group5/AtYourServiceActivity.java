@@ -43,6 +43,8 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
     private EditText editTextMaxPrice;
     private CheckBox checkBoxIfCache;
 
+    private ToggleButton toggleButtonCountry;
+
     private Handler handler = new Handler();
     private String keyword;
     private String minPrice;
@@ -62,6 +64,8 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         editTextMinPrice=findViewById(R.id.minPriceEditText);
         editTextMaxPrice=findViewById(R.id.maxPriceEditText);
         checkBoxIfCache=findViewById(R.id.checkBoxCaching);
+        toggleButtonCountry=findViewById(R.id.toggleCountry);
+        progressBar=findViewById(R.id.progressLoader);
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +83,6 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        progressBar=findViewById(R.id.progressLoader);
-
         //the dropdown for the sorting methods
         Spinner spinner = (Spinner) findViewById(R.id.spinnerSorting);
         // Create an ArrayAdapter using the string array and a default spinner layout.
@@ -95,6 +97,16 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
+        //country toggle also change the currency
+        toggleButtonCountry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String current=toggleButtonCountry.isChecked()?"CAD":"USD";
+                String minUnit=current+" to";
+                ((TextView) findViewById(R.id.minPriceTextView)).setText(minUnit);
+                ((TextView) findViewById(R.id.maxPriceTextView)).setText(current);
+            }
+        });
 
     }
 
@@ -115,7 +127,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
 
     private void performSearch()
     {
-        country=((ToggleButton)findViewById(R.id.toggleCountry)).isChecked()?"Canada":"USA";
+        country=toggleButtonCountry.isChecked()?"Canada":"USA";
         //get user input
         //keyword
         keyword=editTextKeyword.getText().toString();
@@ -173,7 +185,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         //hd_sort       $sortType
         //lowerbound    $minPrice
         //upperbound    $max_price
-        //no_cache      false/true
+        //no_cache      $ifDisableCache (false/true)
 
         //Canada
         //key          value
@@ -186,10 +198,10 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         //minmax        Example: price:[100 TO 500](Between $100 to $500)
         //              Example: price:[100 TO *](Minimum $100)
         //              Example: price:[0 TO 500](Maximum $500)
-        //no_cache      false/true
+        //no_cache      $ifDisableCache (false/true)
 
         try{
-            /// a url that gives feedback in given amount delay time, to test the loading progess bar.
+            /// a url that gives feedback in given amount delay time, to test the loading progress bar.
 //            URL url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
             String api_key="46b4efc39069e71e94b9df0cc639c4fb01951988f2a312425fdaf43cdf1b807d";
             String baseURL="https://serpapi.com/search.json?engine=home_depot";
