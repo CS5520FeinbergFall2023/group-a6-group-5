@@ -125,6 +125,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    progressBar.setVisibility(View.GONE);
                     View rootView = findViewById(android.R.id.content);
                     Snackbar.make(rootView, "Search keyword cannot be empty.", Snackbar.LENGTH_SHORT).show();
                 }
@@ -162,8 +163,60 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         Log.d("performSearchSortKey",sortTypeSearchKey);
         Log.d("performSearchNoCache", String.valueOf(ifDisableCache));
 
+        //USA
+        //key          value
+        //----------------------
+        //q             $keyword
+        //engine        home_depot
+        //api_key       $your_api_key
+        //country       us
+        //hd_sort       $sortType
+        //lowerbound    $minPrice
+        //upperbound    $max_price
+        //no_cache      false/true
+
+        //Canada
+        //key          value
+        //----------------------
+        //q             $keyword
+        //engine        home_depot
+        //api_key       $your_api_key
+        //country       ca
+        //sort          $sortType
+        //minmax        Example: price:[100 TO 500](Between $100 to $500)
+        //              Example: price:[100 TO *](Minimum $100)
+        //              Example: price:[0 TO 500](Maximum $500)
+        //no_cache      false/true
+
         try{
-            URL url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
+            /// a url that gives feedback in given amount delay time, to test the loading progess bar.
+//            URL url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
+            String api_key="46b4efc39069e71e94b9df0cc639c4fb01951988f2a312425fdaf43cdf1b807d";
+            String baseURL="https://serpapi.com/search.json?engine=home_depot";
+            String getParams;
+            if(country.equals("USA"))
+            {
+                getParams=String.format("&q=%s&api_key=%s&country=us&hd_sort=%s&no_cache=%b",keyword,api_key,sortType,ifDisableCache);
+                if(!minPrice.isEmpty())
+                {
+                    getParams=getParams+"&lowerbound="+minPrice;
+                }
+                if(!maxPrice.isEmpty())
+                {
+                    getParams=getParams+"&upperbound="+maxPrice;
+                }
+            }
+            else{
+                getParams=String.format("&q=%s&api_key=%s&country=ca&sort=%s&no_cache=%b",keyword,api_key,sortType,ifDisableCache);
+                if(!minPrice.isEmpty()||!maxPrice.isEmpty())
+                {
+                    minPrice=(minPrice.isEmpty())?"*":minPrice;
+                    maxPrice=(maxPrice.isEmpty())?"*":maxPrice;
+                    getParams=getParams+String.format("&minmax=[%s TO %s]",minPrice,maxPrice);
+                }
+            }
+            URL url=new URL(baseURL+getParams);
+            Log.d("performSearchHomeDepotURL",url.toString());
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -199,6 +252,17 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         }catch (Exception e)
         {
             e.printStackTrace();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    View rootView = findViewById(android.R.id.content);
+                    // Handle exception
+                    Snackbar.make(rootView, "Fail", Snackbar.LENGTH_SHORT).show();
+                    Log.d("performSearchException",e.toString());
+                    // Hide loading indicator
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
         }
     }
 }
