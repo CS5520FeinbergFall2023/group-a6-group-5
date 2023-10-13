@@ -30,6 +30,7 @@ public class SearchResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
+        init(savedInstanceState);
 
         //get the http response from the AtYourServiceActivity
         Intent intent = getIntent();
@@ -68,6 +69,12 @@ public class SearchResultActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void init(Bundle savedInstanceState) {
+        //later add this
+//        initialItemData(savedInstanceState);
+        createRecyclerView();
     }
 
     private void createRecyclerView() {

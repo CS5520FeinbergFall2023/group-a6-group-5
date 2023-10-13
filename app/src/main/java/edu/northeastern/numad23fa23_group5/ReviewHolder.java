@@ -15,7 +15,13 @@ public class ReviewHolder extends RecyclerView.ViewHolder {
     TextView price;
     RatingBar rating;
     ImageView thumbnail;
+
     public ReviewHolder(@NonNull View itemView, final ItemClickListener listener, Context context) {
         super(itemView);
+        productName=itemView.findViewById(R.id.item_name);
+        brandName=itemView.findViewById(R.id.brand_name);
+        price=itemView.findViewById(R.id.item_price);
+        rating=itemView.findViewById(R.id.ratingBar);
+        thumbnail=itemView.findViewById(R.id.imageViewThumbnail);
     }
 }
