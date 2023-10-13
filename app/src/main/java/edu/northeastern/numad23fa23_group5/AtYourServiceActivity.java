@@ -135,7 +135,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         //keyword
         keyword=editTextKeyword.getText().toString();
         //check if search keyword is empty
-        if(keyword.isEmpty()||keyword.isBlank())
+        if(keyword.isEmpty())
         {
             handler.post(new Runnable() {
                 @Override
@@ -204,8 +204,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         //no_cache      $ifDisableCache (false/true)
 
         try{
-            /// a url that gives feedback in given amount delay time, to test the loading progress bar.
-//            URL url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
+
             String api_key="46b4efc39069e71e94b9df0cc639c4fb01951988f2a312425fdaf43cdf1b807d";
             String baseURL="https://serpapi.com/search.json?engine=home_depot";
             String getParams;
@@ -231,6 +230,8 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                 }
             }
             URL url=new URL(baseURL+getParams);
+            /// a url that gives feedback in given amount delay time, to test the loading progress bar.
+            url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
             Log.d("performSearchHomeDepotURL",url.toString());
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {
@@ -242,13 +243,13 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                 }
                 bufferedReader.close();
                 final String response = stringBuilder.toString();
-                JSONObject jsonObjectResponse=new JSONObject(response);
                 Log.d("performSearchResponse",response);
-                Log.d("performSearchProductsPosition ", jsonObjectResponse.getJSONArray("products").toString());
-                JSONArray resultProducts=jsonObjectResponse.getJSONArray("products");
-                for (int i = 0; i < resultProducts.length(); i++) {
-                    Log.d("performSearchProductTitle",resultProducts.getJSONObject(i).getString("title"));
-                }
+//                JSONObject jsonObjectResponse=new JSONObject(response);
+//                Log.d("performSearchProductsPosition ", jsonObjectResponse.getJSONArray("products").toString());
+//                JSONArray resultProducts=jsonObjectResponse.getJSONArray("products");
+//                for (int i = 0; i < resultProducts.length(); i++) {
+//                    Log.d("performSearchProductTitle",resultProducts.getJSONObject(i).getString("title"));
+//                }
                 // Process the response on the main UI thread
                 handler.post(new Runnable() {
                     @Override
@@ -264,12 +265,17 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                             // Handle null or error response
                             Snackbar.make(rootView, "Fail", Snackbar.LENGTH_SHORT).show();
                             Log.d("performSearchFail",response);
+                            return;
                         }
                         // Hide loading indicator
                         progressBar.setVisibility(View.GONE);
                     }
                 });
-
+                // start a new activity to show the search result
+                Intent intent = new Intent(AtYourServiceActivity.this, SearchResultActivity.class);
+                // pass the response to the new activity
+                intent.putExtra("responseKey", response);
+                startActivity(intent);
             } finally {
                 urlConnection.disconnect();
             }
