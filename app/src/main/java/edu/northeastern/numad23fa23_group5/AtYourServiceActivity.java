@@ -222,7 +222,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
             }
             URL url=new URL(baseURL+getParams);
             /// a url that gives feedback in given amount delay time, to test the loading progress bar.
-            url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
+//            url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
             Log.d("performSearchHomeDepotURL",url.toString());
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {

@@ -12,6 +12,7 @@ public class ItemCard {
     String title;
     //brand
     String brand;
+    String price;
     //ratings
     float ratings;
 
@@ -42,5 +43,60 @@ public class ItemCard {
         this field of "pick up" won't exists if pickup is unavailable
      */
 
+    public ItemCard(String thumbnailURL, String imageURL, String title, String brand, String price, float ratings) {
+        this.thumbnailURL = thumbnailURL;
+        this.imageURL = imageURL;
+        this.title = title;
+        this.brand = brand;
+        this.price = price;
+        this.ratings = ratings;
+    }
 
+    public String getThumbnailURL() {
+        return thumbnailURL;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public float getRatings() {
+        return ratings;
+    }
+
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public void setRatings(float ratings) {
+        this.ratings = ratings;
+    }
 }

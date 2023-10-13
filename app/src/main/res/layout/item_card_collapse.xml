@@ -51,15 +51,11 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_alignParentEnd="true"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@tools:sample/avatars" />
+            android:src="@drawable/sample_thumbnail" />
 
     </RelativeLayout>
-
-
 
 </androidx.cardview.widget.CardView>
