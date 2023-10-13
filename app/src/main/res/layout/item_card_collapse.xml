@@ -20,7 +20,7 @@
             >
             <TextView
                 android:id="@+id/item_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:layout_marginStart="10dp"
@@ -31,7 +31,9 @@
                 app:layout_constraintBottom_toTopOf="@+id/brand_name"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:text="@string/item_name" />
+                android:text="@string/item_name"
+                android:maxLines="2"
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/brand_name"
