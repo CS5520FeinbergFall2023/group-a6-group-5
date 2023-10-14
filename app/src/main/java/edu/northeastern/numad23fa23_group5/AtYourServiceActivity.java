@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -30,13 +31,11 @@ import java.net.URL;
 
 public class AtYourServiceActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private TextView tvResults;
     private ProgressBar progressBar;
     private EditText editTextKeyword;
     private EditText editTextMinPrice;
     private EditText editTextMaxPrice;
     private CheckBox checkBoxIfCache;
-
     private ToggleButton toggleButtonCountry;
 
     private Handler handler = new Handler();
@@ -45,7 +44,15 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
     private String maxPrice;
     private String sortType;
     private String country;
+    private Spinner spinner;
     private boolean ifDisableCache;
+
+    private static final String KEY_KEYWORD = "KEY_KEYWORD";
+    private static final String KEY_MIN_PRICE = "KEY_MIN_PRICE";
+    private static final String KEY_MAX_PRICE = "KEY_MAX_PRICE";
+    private static final String KEY_SORT_TYPE_POSITION = "KEY_SORT_TYPE_POSITION";
+    private static final String KEY_COUNTRY = "KEY_COUNTRY";
+    private static final String KEY_IF_DISABLE_CACHE = "KEY_IF_DISABLE_CACHE";
 
 
     @Override
@@ -53,7 +60,6 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_at_you_service);
 
-        tvResults = findViewById(R.id.tvResults);
         editTextKeyword=findViewById(R.id.textInputKeyword);
         editTextMinPrice=findViewById(R.id.minPriceEditText);
         editTextMaxPrice=findViewById(R.id.maxPriceEditText);
@@ -61,6 +67,10 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         toggleButtonCountry=findViewById(R.id.toggleCountry);
         progressBar=findViewById(R.id.progressLoader);
         Button btnSearch = findViewById(R.id.btnSearch);
+        spinner = (Spinner) findViewById(R.id.spinnerSorting);
+
+        init(savedInstanceState);
+
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +88,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         });
 
         //the dropdown for the sorting methods
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerSorting);
+
         // Create an ArrayAdapter using the string array and a default spinner layout.
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
@@ -101,16 +111,49 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                 ((TextView) findViewById(R.id.maxPriceTextView)).setText(current);
             }
         });
-
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(KEY_KEYWORD, editTextKeyword.getText().toString());
+        outState.putString(KEY_MIN_PRICE, editTextMinPrice.getText().toString());
+        outState.putString(KEY_MAX_PRICE, editTextMaxPrice.getText().toString());
+        outState.putInt(KEY_SORT_TYPE_POSITION, spinner.getSelectedItemPosition());
+        outState.putBoolean(KEY_COUNTRY, toggleButtonCountry.isChecked());
+        Log.d("onSaveInstanceState",toggleButtonCountry.isChecked()+"");
+        outState.putBoolean(KEY_IF_DISABLE_CACHE, checkBoxIfCache.isChecked());
+        super.onSaveInstanceState(outState);
+    }
+
+    private void init(Bundle savedInstanceState) {
+        initialData(savedInstanceState);
+    }
+
+    private void initialData(Bundle savedInstanceState) {
+        // Not the first time to open this Activity
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_KEYWORD)) {
+            editTextKeyword.setText(savedInstanceState.getString(KEY_KEYWORD));
+            editTextMinPrice.setText(savedInstanceState.getString(KEY_MIN_PRICE));
+            editTextMaxPrice.setText(savedInstanceState.getString(KEY_MAX_PRICE));
+            spinner.setSelection(savedInstanceState.getInt(KEY_SORT_TYPE_POSITION));
+            toggleButtonCountry.setChecked(savedInstanceState.getBoolean(KEY_COUNTRY));
+            Log.d("initialData",savedInstanceState.getBoolean(KEY_COUNTRY)+"");
+            Log.d("initialData",toggleButtonCountry.isChecked()+"");
+            String current=savedInstanceState.getBoolean(KEY_COUNTRY)?"CAD":"USD";
+            String minUnit=current+" to";
+            ((TextView) findViewById(R.id.minPriceTextView)).setText(minUnit);
+            ((TextView) findViewById(R.id.maxPriceTextView)).setText(current);
+            checkBoxIfCache.setChecked(savedInstanceState.getBoolean(KEY_IF_DISABLE_CACHE));
+        }
+        // Empty when open this Activity for the first time
+    }
+
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
         // An item is selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos).
-        Snackbar snackBar = Snackbar.make(view, "Item selected from dropdown: "+parent.getItemAtPosition(pos), Snackbar.LENGTH_SHORT);
         sortType=parent.getItemAtPosition(pos).toString();
-        snackBar.show();
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
