@@ -42,9 +42,10 @@ public class SearchResultActivity extends AppCompatActivity {
                     String brand = resultProducts.getJSONObject(i).getString("brand");
                     String price = resultProducts.getJSONObject(i).getString("price");
                     float ratings = Float.parseFloat(resultProducts.getJSONObject(i).getString("rating"));
+                    long reviews = Long.parseLong(resultProducts.getJSONObject(i).getString("reviews"));
 
                     int position = 0;
-                    itemList.add(position, new ItemCard(thumbnailURL, thumbnailURL, title, brand, price, ratings));
+                    itemList.add(position, new ItemCard(thumbnailURL, thumbnailURL, title, brand, price, ratings,reviews));
                     rviewAdapter.notifyItemInserted(position);
                 }
             } catch (Exception e) {

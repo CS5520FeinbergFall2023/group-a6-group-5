@@ -14,6 +14,7 @@ public class ItemCard implements Parcelable {
     String brand;
     String price;
     float ratings;
+    long reviews;
 
     //TODO: delivery and pick up, not sure how many possible variations are there for these two
     // and they need zipcode which is actually optional. Add them later if wanted.
@@ -38,13 +39,15 @@ public class ItemCard implements Parcelable {
         this field of "pick up" won't exists if pickup is unavailable
      */
 
-    public ItemCard(String thumbnailURL, String imageURL, String title, String brand, String price, float ratings) {
+    public ItemCard(String thumbnailURL, String imageURL, String title, String brand, String price,
+                    float ratings, long reviews) {
         this.thumbnailURL = thumbnailURL;
         this.imageURL = imageURL;
         this.title = title;
         this.brand = brand;
         this.price = price;
         this.ratings = ratings;
+        this.reviews = reviews;
     }
 
     protected ItemCard(Parcel in) {
@@ -54,6 +57,7 @@ public class ItemCard implements Parcelable {
         brand = in.readString();
         price = in.readString();
         ratings = in.readFloat();
+        reviews = in.readLong();
     }
 
     @Override
@@ -64,6 +68,7 @@ public class ItemCard implements Parcelable {
         dest.writeString(brand);
         dest.writeString(price);
         dest.writeFloat(ratings);
+        dest.writeLong(reviews);
     }
 
     @Override
@@ -107,6 +112,8 @@ public class ItemCard implements Parcelable {
         return ratings;
     }
 
+    public long getReviews() { return reviews; }
+
     public void setThumbnailURL(String thumbnailURL) {
         this.thumbnailURL = thumbnailURL;
     }
@@ -130,4 +137,6 @@ public class ItemCard implements Parcelable {
     public void setRatings(float ratings) {
         this.ratings = ratings;
     }
+
+    public void setReviews(long reviews) { this.reviews = reviews; }
 }

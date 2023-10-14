@@ -38,18 +38,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_collapse, parent, false);
         final ReviewHolder holder = new ReviewHolder(view, listener, parent.getContext());
 
-        // Adding a long-click listener to the card view
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (holder.rating.getVisibility() == View.VISIBLE) {
-                    holder.rating.setVisibility(View.GONE);
-                } else {
-                    holder.rating.setVisibility(View.VISIBLE);
-                }
-                return true; // Consume the long-click event
-            }
-        });
+
+
+
+
         return holder;
     }
 
@@ -61,8 +53,35 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
         holder.price.setText("$" + currentItem.getPrice());
         holder.rating.setRating(currentItem.getRatings());
         new ImageLoaderThread(holder.thumbnail, currentItem.getThumbnailURL()).start();
+        holder.reviews.setText("Number of Reviews: " + currentItem.getReviews());
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (holder.rating.getVisibility() == View.VISIBLE) {
+                    holder.rating.setVisibility(View.GONE);
+                    holder.reviews.setVisibility(View.GONE);
+
+                } else {
+                    holder.rating.setVisibility(View.VISIBLE);
+                    toggleAdditionalViews(holder);
+
+                }
+                return true;
+            }
+        });
 
     }
+
+
+    private void toggleAdditionalViews(ReviewHolder holder) {
+        int visibility = holder.reviews.getVisibility();
+        // Toggle visibility (gone <-> visible)
+        holder.reviews.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+        // Toggle visibility of any other additional views here
+    }
+
+
 
     @Override
     public int getItemCount() {
