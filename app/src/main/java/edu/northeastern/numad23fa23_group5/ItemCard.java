@@ -1,25 +1,20 @@
 package edu.northeastern.numad23fa23_group5;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+
 /**
  * A class for cards that represent product search result
  */
-public class ItemCard {
-    // smallest image thumbnail URL
+public class ItemCard implements Parcelable {
     String thumbnailURL;
-    // biggest image URL
     String imageURL;
-    //title
     String title;
-    //brand
     String brand;
     String price;
-    //ratings
     float ratings;
 
-//    boolean ifDeliver;
-//    boolean ifPickUp;
-    //price
-    //variants
     //TODO: delivery and pick up, not sure how many possible variations are there for these two
     // and they need zipcode which is actually optional. Add them later if wanted.
     /* As far as I can see there're:
@@ -51,6 +46,42 @@ public class ItemCard {
         this.price = price;
         this.ratings = ratings;
     }
+
+    protected ItemCard(Parcel in) {
+        thumbnailURL = in.readString();
+        imageURL = in.readString();
+        title = in.readString();
+        brand = in.readString();
+        price = in.readString();
+        ratings = in.readFloat();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(thumbnailURL);
+        dest.writeString(imageURL);
+        dest.writeString(title);
+        dest.writeString(brand);
+        dest.writeString(price);
+        dest.writeFloat(ratings);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<ItemCard> CREATOR = new Creator<ItemCard>() {
+        @Override
+        public ItemCard createFromParcel(Parcel in) {
+            return new ItemCard(in);
+        }
+
+        @Override
+        public ItemCard[] newArray(int size) {
+            return new ItemCard[size];
+        }
+    };
 
     public String getThumbnailURL() {
         return thumbnailURL;
