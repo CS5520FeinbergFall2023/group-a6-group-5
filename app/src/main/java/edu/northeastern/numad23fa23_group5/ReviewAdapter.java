@@ -36,7 +36,21 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
     @Override
     public ReviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_collapse, parent, false);
-        return new ReviewHolder(view,listener,parent.getContext());
+        final ReviewHolder holder = new ReviewHolder(view, listener, parent.getContext());
+
+        // Adding a long-click listener to the card view
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (holder.rating.getVisibility() == View.VISIBLE) {
+                    holder.rating.setVisibility(View.GONE);
+                } else {
+                    holder.rating.setVisibility(View.VISIBLE);
+                }
+                return true; // Consume the long-click event
+            }
+        });
+        return holder;
     }
 
     @Override
@@ -44,9 +58,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
         ItemCard currentItem = itemList.get(position);
         holder.productName.setText(currentItem.getTitle());
         holder.brandName.setText(currentItem.getBrand());
-        holder.price.setText(currentItem.getPrice());
+        holder.price.setText("$" + currentItem.getPrice());
         holder.rating.setRating(currentItem.getRatings());
         new ImageLoaderThread(holder.thumbnail, currentItem.getThumbnailURL()).start();
+
     }
 
     @Override
