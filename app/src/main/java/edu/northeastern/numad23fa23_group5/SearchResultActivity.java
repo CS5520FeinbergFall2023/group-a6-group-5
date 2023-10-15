@@ -44,10 +44,9 @@ public class SearchResultActivity extends AppCompatActivity {
                     String price = resultProducts.getJSONObject(i).getString("price");
                     float ratings = Float.parseFloat(resultProducts.getJSONObject(i).getString("rating"));
                     long reviews = (resultProducts.getJSONObject(i).has("reviews"))?Long.parseLong(resultProducts.getJSONObject(i).getString("reviews")):0;
-                    int position = 0;
-                    itemList.add(position, new ItemCard(thumbnailURL, thumbnailURL, title, brand, price, ratings,reviews));
+                    itemList.add(new ItemCard(thumbnailURL, thumbnailURL, title, brand, price, ratings,reviews));
                     Log.d("SearchResultActivityI",i+"");
-                    rviewAdapter.notifyItemInserted(position);
+                    rviewAdapter.notifyItemInserted(itemList.size()-1);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
