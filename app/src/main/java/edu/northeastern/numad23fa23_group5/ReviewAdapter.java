@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
     private Context context;
     private ItemClickListener listener;
 
+
     //Constructor
     public ReviewAdapter(ArrayList<ItemCard> itemList) {
         this.itemList = itemList;
@@ -37,10 +39,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
     public ReviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_collapse, parent, false);
         final ReviewHolder holder = new ReviewHolder(view, listener, parent.getContext());
-
-
-
-
 
         return holder;
     }
@@ -58,30 +56,25 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (holder.rating.getVisibility() == View.VISIBLE) {
+                if (holder.rating.getVisibility() == View.VISIBLE)
+                   {
                     holder.rating.setVisibility(View.GONE);
                     holder.reviews.setVisibility(View.GONE);
-
-                } else {
+                    holder.thumbnail.setVisibility(View.VISIBLE);
+                    holder.imageViewLarge.setVisibility(View.GONE);
+                }
+                else {
                     holder.rating.setVisibility(View.VISIBLE);
-                    toggleAdditionalViews(holder);
-
+                    holder.reviews.setVisibility(View.VISIBLE);
+                    holder.thumbnail.setVisibility(View.GONE);
+                    holder.imageViewLarge.setVisibility(View.VISIBLE);
+                    new ImageLoaderThread(holder.imageViewLarge, currentItem.getImageURL()).start();
                 }
                 return true;
             }
         });
 
     }
-
-
-    private void toggleAdditionalViews(ReviewHolder holder) {
-        int visibility = holder.reviews.getVisibility();
-        // Toggle visibility (gone <-> visible)
-        holder.reviews.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
-        // Toggle visibility of any other additional views here
-    }
-
-
 
     @Override
     public int getItemCount() {

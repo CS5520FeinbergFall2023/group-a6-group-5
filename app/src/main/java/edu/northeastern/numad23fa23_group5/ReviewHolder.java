@@ -17,6 +17,7 @@ public class ReviewHolder extends RecyclerView.ViewHolder {
     ImageView thumbnail;
 
     TextView reviews;
+    public ImageView imageViewLarge;
 
     public ReviewHolder(@NonNull View itemView, final ItemClickListener listener, Context context) {
         super(itemView);
@@ -26,5 +27,6 @@ public class ReviewHolder extends RecyclerView.ViewHolder {
         rating=itemView.findViewById(R.id.ratingBar);
         thumbnail=itemView.findViewById(R.id.imageViewThumbnail);
         reviews = itemView.findViewById(R.id.item_reviews);
+        imageViewLarge = itemView.findViewById(R.id.imageViewLarge);
     }
 }
