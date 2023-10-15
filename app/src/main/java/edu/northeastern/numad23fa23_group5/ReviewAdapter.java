@@ -49,7 +49,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
     public void onBindViewHolder(ReviewHolder holder, int position) {
         ItemCard currentItem = itemList.get(position);
         holder.productName.setText(currentItem.getTitle());
-        holder.brandName.setText(currentItem.getBrand());
+        holder.brandName.setText("by "+currentItem.getBrand());
         holder.price.setText("$" + currentItem.getPrice());
         holder.rating.setRating(currentItem.getRatings());
         new ImageLoaderThread(holder.thumbnail, currentItem.getThumbnailURL()).start();

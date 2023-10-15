@@ -294,6 +294,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                     View rootView = findViewById(android.R.id.content);
                     Snackbar.make(rootView, "Success", Snackbar.LENGTH_SHORT).show();
                     Log.d("performSearchSuccess", response);
+                    progressBar.setVisibility(View.GONE);
                 }
             });
 

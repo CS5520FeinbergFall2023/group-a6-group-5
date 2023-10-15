@@ -34,18 +34,19 @@ public class SearchResultActivity extends AppCompatActivity {
             try {
                 JSONObject jsonObjectResponse = new JSONObject(responseData);
                 JSONArray resultProducts = jsonObjectResponse.getJSONArray("products");
+                Log.d("SearchResultActivity",resultProducts.length()+"");
                 for (int i = 0; i < resultProducts.length(); i++) {
                     JSONArray thumbnails = resultProducts.getJSONObject(i).getJSONArray("thumbnails").getJSONArray(0);
                     String thumbnailURL = thumbnails.getString(0);
                     String imageURL = thumbnails.getString(thumbnails.length() - 1);
                     String title = resultProducts.getJSONObject(i).getString("title");
-                    String brand = resultProducts.getJSONObject(i).getString("brand");
+                    String brand = (resultProducts.getJSONObject(i).has("brand"))?resultProducts.getJSONObject(i).getString("brand"):"";
                     String price = resultProducts.getJSONObject(i).getString("price");
                     float ratings = Float.parseFloat(resultProducts.getJSONObject(i).getString("rating"));
-                    long reviews = Long.parseLong(resultProducts.getJSONObject(i).getString("reviews"));
-
+                    long reviews = (resultProducts.getJSONObject(i).has("reviews"))?Long.parseLong(resultProducts.getJSONObject(i).getString("reviews")):0;
                     int position = 0;
                     itemList.add(position, new ItemCard(thumbnailURL, thumbnailURL, title, brand, price, ratings,reviews));
+                    Log.d("SearchResultActivityI",i+"");
                     rviewAdapter.notifyItemInserted(position);
                 }
             } catch (Exception e) {
