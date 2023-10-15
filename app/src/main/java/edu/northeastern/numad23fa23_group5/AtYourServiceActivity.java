@@ -182,6 +182,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                     Snackbar.make(rootView, "Search keyword cannot be empty.", Snackbar.LENGTH_SHORT).show();
                 }
             });
+            return;
         }
 
         switch (sortType) {
