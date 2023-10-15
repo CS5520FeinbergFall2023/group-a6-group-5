@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import edu.northeastern.numad23fa23_group5.BuildConfig;
+//import edu.northeastern.numad23fa23_group5.BuildConfig;
 
 
 
@@ -241,8 +241,8 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         //no_cache      $ifDisableCache (false/true)
 
         try {
-            String api_key = BuildConfig.API_KEY;
-//            String api_key = "46b4efc39069e71e94b9df0cc639c4fb01951988f2a312425fdaf43cdf1b807d";
+//            String api_key = BuildConfig.API_KEY;
+            String api_key = "46b4efc39069e71e94b9df0cc639c4fb01951988f2a312425fdaf43cdf1b807d";
             String baseURL = "https://serpapi.com/search.json?engine=home_depot";
             String getParams;
             if (country.equals("USA")) {
@@ -258,7 +258,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                 if (!minPrice.isEmpty() || !maxPrice.isEmpty()) {
                     minPrice = (minPrice.isEmpty()) ? "*" : minPrice;
                     maxPrice = (maxPrice.isEmpty()) ? "*" : maxPrice;
-                    getParams = getParams + String.format("&minmax=[%s TO %s]", minPrice, maxPrice);
+                    getParams = getParams + String.format("&minmax=price:[%s TO %s]", minPrice, maxPrice);
                 }
             }
             URL url = new URL(baseURL + getParams);
