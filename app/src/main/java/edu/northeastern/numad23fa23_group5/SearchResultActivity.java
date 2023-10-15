@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.net.URL;
@@ -32,21 +35,30 @@ public class SearchResultActivity extends AppCompatActivity {
             String responseData = intent.getStringExtra("responseKey");
             try {
                 JSONObject jsonObjectResponse = new JSONObject(responseData);
-                JSONArray resultProducts = jsonObjectResponse.getJSONArray("products");
-                for (int i = 0; i < resultProducts.length(); i++) {
-                    JSONArray thumbnails = resultProducts.getJSONObject(i).getJSONArray("thumbnails").getJSONArray(0);
-                    String thumbnailURL = thumbnails.getString(0);
-                    String imageURL = thumbnails.getString(thumbnails.length() - 1);
-                    String title = resultProducts.getJSONObject(i).getString("title");
-                    String brand = (resultProducts.getJSONObject(i).has("brand"))?resultProducts.getJSONObject(i).getString("brand"):"";
-                    String price = resultProducts.getJSONObject(i).getString("price");
-                    float ratings = Float.parseFloat(resultProducts.getJSONObject(i).getString("rating"));
-                    long reviews = (resultProducts.getJSONObject(i).has("reviews"))?Long.parseLong(resultProducts.getJSONObject(i).getString("reviews")):0;
-                    itemList.add(new ItemCard(thumbnailURL, thumbnailURL, title, brand, price, ratings,reviews));
-                    rviewAdapter.notifyItemInserted(itemList.size()-1);
+
+                // Check if the "products" key exists and the associated array is not empty
+                if(jsonObjectResponse.has("products") && jsonObjectResponse.getJSONArray("products").length() > 0) {
+                    JSONArray resultProducts = jsonObjectResponse.getJSONArray("products");
+                    for (int i = 0; i < resultProducts.length(); i++) {
+                        JSONArray thumbnails = resultProducts.getJSONObject(i).getJSONArray("thumbnails").getJSONArray(0);
+                        String thumbnailURL = thumbnails.getString(0);
+                        String imageURL = thumbnails.getString(thumbnails.length() - 1);
+                        String title = resultProducts.getJSONObject(i).getString("title");
+                        String brand = (resultProducts.getJSONObject(i).has("brand"))?resultProducts.getJSONObject(i).getString("brand"):"";
+                        String price = resultProducts.getJSONObject(i).getString("price");
+                        float ratings = Float.parseFloat(resultProducts.getJSONObject(i).getString("rating"));
+                        long reviews = (resultProducts.getJSONObject(i).has("reviews"))?Long.parseLong(resultProducts.getJSONObject(i).getString("reviews")):0;
+                        itemList.add(new ItemCard(thumbnailURL, thumbnailURL, title, brand, price, ratings,reviews));
+                        rviewAdapter.notifyItemInserted(itemList.size()-1);
+                    }
+                } else {
+                    // A Snackbar with "No results found, sorry" message
+                    Snackbar.make(findViewById(R.id.recycler_view), "No results found, sorry", Snackbar.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                // A Snackbar message in case of an exception
+                Snackbar.make(findViewById(R.id.recycler_view), "An error occurred", Snackbar.LENGTH_LONG).show();
             }
         }
     }
