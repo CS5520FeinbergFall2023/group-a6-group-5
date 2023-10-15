@@ -256,7 +256,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
             } else {
                 getParams = String.format("&q=%s&api_key=%s&country=ca&sort=%s&no_cache=%b", keyword, api_key, sortType, ifDisableCache);
                 if (!minPrice.isEmpty() || !maxPrice.isEmpty()) {
-                    minPrice = (minPrice.isEmpty()) ? "*" : minPrice;
+                    minPrice = (minPrice.isEmpty()) ? "0" : minPrice;
                     maxPrice = (maxPrice.isEmpty()) ? "*" : maxPrice;
                     getParams = getParams + String.format("&minmax=price:[%s TO %s]", minPrice, maxPrice);
                 }
