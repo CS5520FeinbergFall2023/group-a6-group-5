@@ -30,11 +30,9 @@ public class SearchResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("responseKey")) {
             String responseData = intent.getStringExtra("responseKey");
-            Log.d("SearchResultActivity", responseData);
             try {
                 JSONObject jsonObjectResponse = new JSONObject(responseData);
                 JSONArray resultProducts = jsonObjectResponse.getJSONArray("products");
-                Log.d("SearchResultActivity",resultProducts.length()+"");
                 for (int i = 0; i < resultProducts.length(); i++) {
                     JSONArray thumbnails = resultProducts.getJSONObject(i).getJSONArray("thumbnails").getJSONArray(0);
                     String thumbnailURL = thumbnails.getString(0);
@@ -45,7 +43,6 @@ public class SearchResultActivity extends AppCompatActivity {
                     float ratings = Float.parseFloat(resultProducts.getJSONObject(i).getString("rating"));
                     long reviews = (resultProducts.getJSONObject(i).has("reviews"))?Long.parseLong(resultProducts.getJSONObject(i).getString("reviews")):0;
                     itemList.add(new ItemCard(thumbnailURL, thumbnailURL, title, brand, price, ratings,reviews));
-                    Log.d("SearchResultActivityI",i+"");
                     rviewAdapter.notifyItemInserted(itemList.size()-1);
                 }
             } catch (Exception e) {
@@ -75,7 +72,7 @@ public class SearchResultActivity extends AppCompatActivity {
         ItemClickListener itemClickListener = new ItemClickListener() {
             @Override
             public void onItemLongClick(int position, Context context) {
-                Log.d("SearchResultActivity", position + " clicked");
+
             }
         };
         rviewAdapter.setOnItemClickListener(itemClickListener);

@@ -124,7 +124,6 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         outState.putString(KEY_MAX_PRICE, editTextMaxPrice.getText().toString());
         outState.putInt(KEY_SORT_TYPE_POSITION, spinner.getSelectedItemPosition());
         outState.putBoolean(KEY_COUNTRY, toggleButtonCountry.isChecked());
-        Log.d("onSaveInstanceState", toggleButtonCountry.isChecked() + "");
         outState.putBoolean(KEY_IF_DISABLE_CACHE, checkBoxIfCache.isChecked());
         super.onSaveInstanceState(outState);
     }
@@ -141,8 +140,6 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
             editTextMaxPrice.setText(savedInstanceState.getString(KEY_MAX_PRICE));
             spinner.setSelection(savedInstanceState.getInt(KEY_SORT_TYPE_POSITION));
             toggleButtonCountry.setChecked(savedInstanceState.getBoolean(KEY_COUNTRY));
-            Log.d("initialData", savedInstanceState.getBoolean(KEY_COUNTRY) + "");
-            Log.d("initialData", toggleButtonCountry.isChecked() + "");
             String current = savedInstanceState.getBoolean(KEY_COUNTRY) ? "CAD" : "USD";
             String minUnit = current + " to";
             ((TextView) findViewById(R.id.minPriceTextView)).setText(minUnit);
@@ -207,13 +204,6 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
         }
         String sortTypeSearchKey = (country.equals("USA")) ? "hd_sort" : "sort";
         ifDisableCache = checkBoxIfCache.isChecked();
-        Log.d("performSearchCountry", country);
-        Log.d("performSearchKeyword", keyword);
-        Log.d("performSearchMinPrice", minPrice);
-        Log.d("performSearchMaxPrice", maxPrice);
-        Log.d("performSearchSortType", sortType);
-        Log.d("performSearchSortKey", sortTypeSearchKey);
-        Log.d("performSearchNoCache", String.valueOf(ifDisableCache));
 
         //USA
         //key          value
@@ -262,7 +252,7 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
                 }
             }
             URL url = new URL(baseURL + getParams);
-            Log.d("performSearchURL",url.toString());
+
             /// a url that gives feedback in given amount delay time, to test the loading progress bar.
 //            url = new URL("https://jsonplaceholder.typicode.com/posts?_delay=5000");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -291,14 +281,13 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
             }
             bufferedReader.close();
             final String response = stringBuilder.toString();
-            Log.d("performSearchResponse", response);
+
 
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     View rootView = findViewById(android.R.id.content);
                     Snackbar.make(rootView, "Success", Snackbar.LENGTH_SHORT).show();
-                    Log.d("performSearchSuccess", response);
                     progressBar.setVisibility(View.GONE);
                 }
             });
@@ -315,7 +304,6 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
     private void handleErrorResponse(HttpURLConnection connection, int responseCode) {
         try {
             String errorResponse = readErrorResponse(connection);
-            Log.d("performSearchError", errorResponse);
 
             handler.post(new Runnable() {
                 @Override
@@ -349,7 +337,6 @@ public class AtYourServiceActivity extends AppCompatActivity implements AdapterV
             public void run() {
                 View rootView = findViewById(android.R.id.content);
                 Snackbar.make(rootView, "Fail", Snackbar.LENGTH_SHORT).show();
-                Log.d("performSearchException", e.toString());
                 progressBar.setVisibility(View.GONE);
             }
         });

@@ -39,7 +39,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewHolder> {
     public ReviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_collapse, parent, false);
         final ReviewHolder holder = new ReviewHolder(view, listener, parent.getContext());
-
         return holder;
     }
 
