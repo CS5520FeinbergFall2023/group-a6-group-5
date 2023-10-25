@@ -21,6 +21,10 @@
         <activity
             android:name=".AtYourServiceActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
         <activity
             android:name=".AboutUsActivity" />
         <activity
