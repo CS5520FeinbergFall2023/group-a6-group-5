@@ -1,0 +1,55 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        >
+
+        <!-- Image -->
+        <ImageView
+            android:id="@+id/stickerImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher_foreground"
+        />
+
+        <!-- Sticker Name -->
+        <TextView
+            android:id="@+id/stickerNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sticker Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
+
+        <!-- Sticker Price -->
+        <TextView
+            android:id="@+id/stickerPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price: $0.99"
+            android:textSize="14sp"
+            />
+
+        <!-- Sent Count -->
+        <TextView
+            android:id="@+id/sentCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sent Count: 1"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

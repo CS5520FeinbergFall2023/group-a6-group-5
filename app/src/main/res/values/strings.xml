@@ -15,5 +15,9 @@
         <item>Top Rated</item>
         <item>Relevance</item>
     </string-array>
+    <string name="title_activity_personal_info">PersonalInfoActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_personal">Personal</string>
+    <string name="title_chat">Chat</string>
 
 </resources>
