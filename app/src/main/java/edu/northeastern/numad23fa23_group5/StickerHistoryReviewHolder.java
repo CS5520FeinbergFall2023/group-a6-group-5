@@ -1,5 +1,6 @@
 package edu.northeastern.numad23fa23_group5;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,5 +19,6 @@ public class StickerHistoryReviewHolder extends RecyclerView.ViewHolder{
         stickerName=itemView.findViewById(R.id.stickerNameTextView);
         stickerPrice=itemView.findViewById(R.id.stickerPriceTextView);
         stickerSentCount=itemView.findViewById(R.id.sentCountTextView);
+        Log.d("StickerHistoryReviewHolder", String.valueOf(stickerImage==null));
     }
 }

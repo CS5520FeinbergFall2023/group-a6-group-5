@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class StickerHistoryAdapter extends RecyclerView.Adapter<StickerHistoryReviewHolder>{
     private final ArrayList<StickerHistoryItemCard> itemList;
+    private ItemClickListener listener;
 
     public StickerHistoryAdapter(ArrayList<StickerHistoryItemCard> itemList) {
         this.itemList = itemList;
@@ -17,9 +18,13 @@ public class StickerHistoryAdapter extends RecyclerView.Adapter<StickerHistoryRe
 
     @Override
     public StickerHistoryReviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_collapse, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_sticker_history, parent, false);
         final StickerHistoryReviewHolder holder = new StickerHistoryReviewHolder(view);
         return holder;
+    }
+
+    public void setOnItemClickListener(ItemClickListener listener) {
+        this.listener = listener;
     }
 
     @Override

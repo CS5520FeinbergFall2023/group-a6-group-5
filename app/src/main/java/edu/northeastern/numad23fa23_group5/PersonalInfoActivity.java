@@ -1,5 +1,6 @@
 package edu.northeastern.numad23fa23_group5;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -27,15 +29,41 @@ public class PersonalInfoActivity extends AppCompatActivity {
     private StickerHistoryAdapter stickerHistoryAdapter;
     private RecyclerView.LayoutManager rLayoutManger;
 
+    private static final String KEY_ITEM_LIST = "KEY_ITEM_LIST";
 
-    private ActivityPersonalInfoBinding binding;
+    private void init(Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_ITEM_LIST)) {
+            itemList = savedInstanceState.getParcelableArrayList(KEY_ITEM_LIST);
+        }
+        createRecyclerView();
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_ITEM_LIST, itemList);
+    }
+
+    private void createRecyclerView() {
+        rLayoutManger = new LinearLayoutManager(this);
+        recyclerView = findViewById(R.id.recyclerViewStickersSent);
+        recyclerView.setHasFixedSize(true);
+        stickerHistoryAdapter = new StickerHistoryAdapter(itemList);
+//        ItemClickListener itemClickListener = new ItemClickListener() {
+//            @Override
+//            public void onItemLongClick(int position, Context context) {
+//
+//            }
+//        };
+//        stickerHistoryAdapter.setOnItemClickListener(itemClickListener);
+        recyclerView.setAdapter(stickerHistoryAdapter);
+        recyclerView.setLayoutManager(rLayoutManger);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityPersonalInfoBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_personal_info);
+        init(savedInstanceState);
 
         //todo:should be getting actual data from database
         //        Intent intent = getIntent();
