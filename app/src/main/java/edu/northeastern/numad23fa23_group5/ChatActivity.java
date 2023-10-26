@@ -34,6 +34,10 @@ public class ChatActivity extends AppCompatActivity {
 
                 switch(item.getItemId())
                 {
+                    case R.id.navigation_home:
+                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
                     case R.id.navigation_chat:
                         return true;
                     case R.id.navigation_personal:

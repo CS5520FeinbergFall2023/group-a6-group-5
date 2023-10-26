@@ -121,6 +121,10 @@ public class PersonalInfoActivity extends AppCompatActivity {
 
                 switch(item.getItemId())
                 {
+                    case R.id.navigation_home:
+                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
                     case R.id.navigation_chat:
                         startActivity(new Intent(getApplicationContext(),ChatActivity.class));
                         overridePendingTransition(0,0);
