@@ -6,20 +6,14 @@
     app:startDestination="@+id/navigation_home">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="edu.northeastern.numad23fa23_group5.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
         android:id="@+id/navigation_chat"
         android:name="edu.northeastern.numad23fa23_group5.ui.chat.ChatFragment"
         android:label="@string/title_chat"
-        tools:layout="@layout/fragment_chat" />
+         />
 
     <fragment
         android:id="@+id/navigation_personal"
         android:name="edu.northeastern.numad23fa23_group5.ui.personal.PersonalFragment"
         android:label="@string/title_personal"
-        tools:layout="@layout/fragment_personal" />
+         />
 </navigation>

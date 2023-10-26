@@ -2,11 +2,11 @@ package edu.northeastern.numad23fa23_group5;
 
 public class StickerHistoryItemCard {
     String stickerThumbnailPath;
-    String stickerPrice;
+    float stickerPrice;
     String stickerName;
     int stickerSentCount;
 
-    public StickerHistoryItemCard(String stickerThumbnailPath, String stickerPrice, String stickerName, int stickerSentCount) {
+    public StickerHistoryItemCard(String stickerThumbnailPath, float stickerPrice, String stickerName, int stickerSentCount) {
         this.stickerThumbnailPath = stickerThumbnailPath;
         this.stickerPrice = stickerPrice;
         this.stickerName = stickerName;
@@ -21,11 +21,11 @@ public class StickerHistoryItemCard {
         this.stickerThumbnailPath = stickerThumbnailPath;
     }
 
-    public String getStickerPrice() {
+    public float getStickerPrice() {
         return stickerPrice;
     }
 
-    public void setStickerPrice(String stickerPrice) {
+    public void setStickerPrice(float stickerPrice) {
         this.stickerPrice = stickerPrice;
     }
 

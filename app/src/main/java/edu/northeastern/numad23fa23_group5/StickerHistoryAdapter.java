@@ -28,7 +28,7 @@ public class StickerHistoryAdapter extends RecyclerView.Adapter<StickerHistoryRe
         holder.stickerSentCount.setText("Sent Count: "+currentItem.getStickerSentCount());
         holder.stickerName.setText(currentItem.getStickerName());
         holder.stickerPrice.setText("Price: $" + currentItem.getStickerPrice());
-        //todo:also a function to load picture from image
+        //todo:also a function to load picture from image info from the database
     }
 
     @Override
