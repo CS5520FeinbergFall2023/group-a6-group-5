@@ -13,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +45,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
     }
 
     private void createRecyclerView() {
-        rLayoutManger = new LinearLayoutManager(this);
+        rLayoutManger = new GridLayoutManager(this, 2);
         recyclerView = findViewById(R.id.recyclerViewStickersSent);
         recyclerView.setHasFixedSize(true);
         stickerHistoryAdapter = new StickerHistoryAdapter(itemList);
