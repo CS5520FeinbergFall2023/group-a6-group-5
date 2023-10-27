@@ -3,9 +3,17 @@ package edu.northeastern.numad23fa23_group5;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,6 +76,37 @@ public class PersonalInfoActivity extends AppCompatActivity {
 
         //todo:should be getting actual data from database
         //        Intent intent = getIntent();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        String messageIdToFind = "message-id-1";
+
+        DatabaseReference messagesRef = FirebaseDatabase.getInstance().getReference().child("sticker-messaging").child("messages");
+
+        Query query = messagesRef.orderByChild("message-id").equalTo(messageIdToFind);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                        String senderId = messageSnapshot.child("sender-id").getValue(String.class);
+                        if (senderId != null) {
+                            Log.d("FirebaseDatabase", senderId);
+                        }
+                    }
+                } else {
+                    // Handle the case where the message with messageIdToFind does not exist
+                    Log.d("FirebaseDatabase", "not exist");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("FirebaseDatabase", "DatabaseError");
+            }
+        });
+
 
         String testData="{\n" +
                 "  \"result\": [\n" +
