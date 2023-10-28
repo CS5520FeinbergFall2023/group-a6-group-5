@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if(!username.isEmpty())
                 {
+                    Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+
                     //add to database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference usersRef = database.getReference().child("sticker-messaging").child("users");
@@ -76,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 Log.e("UserFirebase",username+" exists");
+                                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                                    String userID = userSnapshot.getKey();
+                                    intent.putExtra("userID", userID);
+                                }
                             } else {
                                 // Username does not exist, create a new user
                                 DatabaseReference newUserRef = usersRef.push();
@@ -84,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
 //                                newUserRef.child("username").setValue(username);
                                 //or
                                 newUserRef.setValue(new User(username));
+                                intent.putExtra("userID", userId);
                                 Log.e("UserFirebase",userId+" "+username);
-
                             }
                         }
 
@@ -94,12 +100,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("UserFirebase","error occurred when creating new user.");
                         }
                     });
-
-
-                }
-                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                intent.putExtra("username", username);
+                intent.putExtra("userID", username);
                 startActivity(intent);
+                }
             }
         });
 
