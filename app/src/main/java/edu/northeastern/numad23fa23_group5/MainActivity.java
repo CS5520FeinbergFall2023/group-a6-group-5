@@ -63,11 +63,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString();
-
                 if(!username.isEmpty())
                 {
                     Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-
                     //add to database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference usersRef = database.getReference().child("sticker-messaging").child("users");
@@ -102,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
                     });
                 intent.putExtra("userID", username);
                 startActivity(intent);
+                }
+                else{
+                    Snackbar.make(findViewById(R.id.main_view), "Username can't be empty", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
