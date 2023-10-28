@@ -47,7 +47,7 @@ public class UsersListActivity extends AppCompatActivity {
 
     private void fetchUsersFromFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference().child("sticker-messaging").child("users");
+        DatabaseReference usersRef = database.getReference("users");
 
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

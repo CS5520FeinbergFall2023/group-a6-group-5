@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/iv_sticker_item"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/tv_sticker_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sticker Name"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tv_sticker_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$0.00"
+        android:layout_marginTop="2dp" />
+
+</LinearLayout>
