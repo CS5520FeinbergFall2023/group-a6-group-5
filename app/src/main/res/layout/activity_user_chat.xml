@@ -9,34 +9,26 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutStickers"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view_stickers"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linearLayoutStickers"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_stickers"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Add ImageButtons or ImageViews for different stickers here -->
+    <Button
+        android:id="@+id/btnSendSticker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view_stickers" />
 
-        <ImageButton
-            android:id="@+id/sticker1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/ic_notifications_black_24dp" />
-
-        <!-- Add more stickers as needed -->
-
-        <Button
-            android:id="@+id/btnSendSticker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
