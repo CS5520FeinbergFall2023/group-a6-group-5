@@ -47,7 +47,8 @@ public class UsersListActivity extends AppCompatActivity {
 
     private void fetchUsersFromFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("users");
+        // Update the reference to match the new schema
+        DatabaseReference usersRef = database.getReference("sticker-messaging").child("users");
 
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
