@@ -3,6 +3,7 @@ package edu.northeastern.numad23fa23_group5;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import edu.northeastern.numad23fa23_group5.databinding.ActivityPersonalInfoBinding;
 
@@ -48,6 +50,17 @@ public class ChatActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        FloatingActionButton fabShowUsers = findViewById(R.id.fabUserList);
+        fabShowUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to the activity or fragment showing the list of users
+                Intent intent = new Intent(ChatActivity.this, UsersListActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 }

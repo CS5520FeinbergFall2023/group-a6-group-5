@@ -25,6 +25,12 @@
             android:name=".AtYourServiceActivity"
             android:exported="false" />
         <activity
+            android:name=".UsersListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChatActivity"
             android:exported="false" />
         <activity android:name=".AboutUsActivity" />

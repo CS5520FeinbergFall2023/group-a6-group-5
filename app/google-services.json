@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "608672262015",
-    "project_id": "numad23fa23-group5",
-    "storage_bucket": "numad23fa23-group5.appspot.com"
+    "project_number": "422375954003",
+    "firebase_url": "https://numadfa23-group5-default-rtdb.firebaseio.com",
+    "project_id": "numadfa23-group5",
+    "storage_bucket": "numadfa23-group5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:608672262015:android:73cba5e3c4182022c7dc4a",
+        "mobilesdk_app_id": "1:422375954003:android:fb76052e3d28c8e06258a6",
         "android_client_info": {
           "package_name": "edu.northeastern.numad23fa23_group5"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC6GAlnQ2_ZRVRRwUCrMef6lmtMkzw4dMU"
+          "current_key": "AIzaSyArmtMxJNLBl56jykrYnwjZAmPFgGtmQko"
         }
       ],
       "services": {
