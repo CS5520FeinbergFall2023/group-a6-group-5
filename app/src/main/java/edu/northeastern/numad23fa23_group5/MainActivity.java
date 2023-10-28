@@ -2,13 +2,26 @@ package edu.northeastern.numad23fa23_group5;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import edu.northeastern.numad23fa23_group5.model.User;
+
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +63,40 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString();
+
+                if(!username.isEmpty())
+                {
+                    //add to database
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference usersRef = database.getReference().child("sticker-messaging").child("users");
+                    // Check if the username already exists
+                    Query query = usersRef.orderByChild("username").equalTo(username);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                Log.e("UserFirebase",username+" exists");
+                            } else {
+                                // Username does not exist, create a new user
+                                DatabaseReference newUserRef = usersRef.push();
+                                String userId = newUserRef.getKey();
+                                //manually set fields
+//                                newUserRef.child("username").setValue(username);
+                                //or
+                                newUserRef.setValue(new User(username));
+                                Log.e("UserFirebase",userId+" "+username);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e("UserFirebase","error occurred when creating new user.");
+                        }
+                    });
+
+
+                }
                 Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                 intent.putExtra("username", username);
                 startActivity(intent);

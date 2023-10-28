@@ -80,32 +80,38 @@ public class PersonalInfoActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String messageIdToFind = "message-id-1";
 
-        DatabaseReference messagesRef = FirebaseDatabase.getInstance().getReference().child("sticker-messaging").child("messages");
+        DatabaseReference messagesRef = database.getReference().child("sticker-messaging");
+        messagesRef=messagesRef.child("messages");
+        messagesRef=messagesRef.child("message-id-1");
 
-        Query query = messagesRef.orderByChild("message-id").equalTo(messageIdToFind);
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference stickersRef = database.getReference().child("sticker-messaging").child("stickers");
+
+        stickersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                        String senderId = messageSnapshot.child("sender-id").getValue(String.class);
-                        if (senderId != null) {
-                            Log.d("FirebaseDatabase", senderId);
+                    for (DataSnapshot stickerSnapshot : dataSnapshot.getChildren()) {
+                        String imagePath = stickerSnapshot.child("image-path").getValue(String.class);
+                        double price = stickerSnapshot.child("price").getValue(Double.class);
+
+                        if (imagePath != null) {
+                            Log.d("FirebaseDatabase", "Image Path: " + imagePath);
                         }
+
+                        Log.d("FirebaseDatabase", "Price: " + price);
                     }
                 } else {
-                    // Handle the case where the message with messageIdToFind does not exist
-                    Log.d("FirebaseDatabase", "not exist");
-
+                    Log.d("FirebaseDatabase", "No data found for stickers");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("FirebaseDatabase", "DatabaseError");
+                // Handle errors
             }
         });
+
 
 
         String testData="{\n" +
