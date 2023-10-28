@@ -22,16 +22,14 @@ public class UserChatActivity extends AppCompatActivity {
     private List<Sticker> stickers = new ArrayList<>();
     private ChatAdapter chatAdapter;
     private StickerAdapter stickerAdapter;
-    private String selectedUser;
+    private String selectedUserID;  // Renamed from selectedUser
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_chat);
 
-        selectedUser = getIntent().getStringExtra("selectedUser");
-//        System.out.println(selectedUser);
-
+        selectedUserID = getIntent().getStringExtra("selectedUserID");  // Changed to selectedUserID
 
         recyclerViewChat = findViewById(R.id.recycler_view_chat);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -49,8 +47,6 @@ public class UserChatActivity extends AppCompatActivity {
 
     private void fetchChatHistoryFromFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        // Adjust the reference path to match the new JSON structure
         DatabaseReference messagesRef = database.getReference("sticker-messaging").child("messages");
 
         messagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -59,15 +55,13 @@ public class UserChatActivity extends AppCompatActivity {
                 chatHistory.clear();
                 for (DataSnapshot messageIDSnapshot : dataSnapshot.getChildren()) {
                     Message message = messageIDSnapshot.getValue(Message.class);
-                    if (message != null && (message.getSenderID().equals(selectedUser) || message.getReceiverID().equals(selectedUser))) {
+                    if (message != null && (message.getSenderID().equals(selectedUserID) || message.getReceiverID().equals(selectedUserID))) {
                         chatHistory.add(message);
-//                        System.out.println("Entered");
                     }
                 }
 
                 // Sorting by timestamp
                 Collections.sort(chatHistory, (m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
-
                 chatAdapter.notifyDataSetChanged();
             }
 
@@ -77,7 +71,6 @@ public class UserChatActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void fetchStickersFromFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -102,5 +95,4 @@ public class UserChatActivity extends AppCompatActivity {
             }
         });
     }
-
 }

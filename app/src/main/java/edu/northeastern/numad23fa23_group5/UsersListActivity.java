@@ -2,18 +2,15 @@ package edu.northeastern.numad23fa23_group5;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +18,8 @@ public class UsersListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewUsers;
     private UsersAdapter usersAdapter;
-    private List<String> userList = new ArrayList<>();
+    private List<String> userIDs = new ArrayList<>();
+    private List<String> usernames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +28,14 @@ public class UsersListActivity extends AppCompatActivity {
 
         recyclerViewUsers = findViewById(R.id.recycler_view_users);
         recyclerViewUsers.setLayoutManager(new LinearLayoutManager(this));
-        usersAdapter = new UsersAdapter(userList);
+        usersAdapter = new UsersAdapter(usernames);
 
         // Set the item click listener
         usersAdapter.setOnItemClickListener(new UsersAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                String selectedUser = userList.get(position);
-                openChatWithUser(selectedUser);
+                String selectedUserID = userIDs.get(position);
+                openChatWithUser(selectedUserID);
             }
         });
 
@@ -47,16 +45,16 @@ public class UsersListActivity extends AppCompatActivity {
 
     private void fetchUsersFromFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        // Update the reference to match the new schema
         DatabaseReference usersRef = database.getReference("sticker-messaging").child("users");
 
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
+                userIDs.clear();
+                usernames.clear();
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    String username = userSnapshot.child("username").getValue(String.class);
-                    userList.add(username);
+                    userIDs.add(userSnapshot.getKey());
+                    usernames.add(userSnapshot.child("username").getValue(String.class));
                 }
                 usersAdapter.notifyDataSetChanged();
             }
@@ -68,10 +66,10 @@ public class UsersListActivity extends AppCompatActivity {
         });
     }
 
-    // Method to open the chat interface for the selected user
-    private void openChatWithUser(String username) {
+    // Method to open the chat interface for the selected user using their userID
+    private void openChatWithUser(String userID) {
         Intent intent = new Intent(UsersListActivity.this, UserChatActivity.class);
-        intent.putExtra("selectedUser", username);
+        intent.putExtra("selectedUserID", userID);
         startActivity(intent);
     }
 }
