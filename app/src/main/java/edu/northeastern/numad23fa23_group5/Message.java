@@ -1,45 +1,49 @@
 package edu.northeastern.numad23fa23_group5;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class Message {
-    private String from;
-    private String to;
-    private String sticker;
+    private boolean ifRead;
+    private String senderID;
+    private String receiverID;
+    private String stickerID;
     private String timestamp;  // Timestamp when the message was sent
 
     // Default constructor required for Firebase
     public Message() {}
 
-    public Message(String from, String to, String sticker, String timestamp) {
-        this.from = from;
-        this.to = to;
-        this.sticker = sticker;
+    public Message(String senderID, String receiverID, String stickerID, String timestamp) {
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.stickerID = stickerID;
         this.timestamp = timestamp;
     }
 
     // Getters and Setters
 
-    public String getFrom() {
-        return from;
+    public String getSenderID() {
+        return senderID;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public void setSenderID(String senderID) {
+        this.senderID = senderID;
     }
 
-    public String getTo() {
-        return to;
+    public String getReceiverID() {
+        return receiverID;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public void setReceiverID(String receiverID) {
+        this.receiverID = receiverID;
     }
 
-    public String getSticker() {
-        return sticker;
+    public String getStickerID() {
+        return stickerID;
     }
 
-    public void setSticker(String sticker) {
-        this.sticker = sticker;
+    public void setStickerID(String stickerID) {
+        this.stickerID = stickerID;
     }
 
     public String getTimestamp() {
@@ -48,5 +52,13 @@ public class Message {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public boolean isIfRead() {
+        return ifRead;
+    }
+
+    public void setIfRead(boolean ifRead) {
+        this.ifRead = ifRead;
     }
 }

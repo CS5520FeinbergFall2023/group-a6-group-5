@@ -30,6 +30,8 @@ public class UserChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_chat);
 
         selectedUser = getIntent().getStringExtra("selectedUser");
+//        System.out.println(selectedUser);
+
 
         recyclerViewChat = findViewById(R.id.recycler_view_chat);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -47,30 +49,19 @@ public class UserChatActivity extends AppCompatActivity {
 
     private void fetchChatHistoryFromFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userMessagesRef = database.getReference("users").child(selectedUser).child("messages");
 
-        userMessagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Adjust the reference path to match the new JSON structure
+        DatabaseReference messagesRef = database.getReference("sticker-messaging").child("messages");
+
+        messagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatHistory.clear();
-
-                // Fetching sent messages
-                DataSnapshot sentMessagesSnapshot = dataSnapshot.child("sent");
-                for (DataSnapshot messageSnapshot : sentMessagesSnapshot.getChildren()) {
-                    Message message = messageSnapshot.getValue(Message.class);
-                    if (message != null) {
-                        message.setFrom(selectedUser);
+                for (DataSnapshot messageIDSnapshot : dataSnapshot.getChildren()) {
+                    Message message = messageIDSnapshot.getValue(Message.class);
+                    if (message != null && (message.getSenderID().equals(selectedUser) || message.getReceiverID().equals(selectedUser))) {
                         chatHistory.add(message);
-                    }
-                }
-
-                // Fetching received messages
-                DataSnapshot receivedMessagesSnapshot = dataSnapshot.child("received");
-                for (DataSnapshot messageSnapshot : receivedMessagesSnapshot.getChildren()) {
-                    Message message = messageSnapshot.getValue(Message.class);
-                    if (message != null) {
-                        message.setTo(selectedUser);
-                        chatHistory.add(message);
+//                        System.out.println("Entered");
                     }
                 }
 
@@ -87,9 +78,10 @@ public class UserChatActivity extends AppCompatActivity {
         });
     }
 
+
     private void fetchStickersFromFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference stickersRef = database.getReference("stickers");
+        DatabaseReference stickersRef = database.getReference("sticker-messaging").child("stickers");
 
         stickersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -110,4 +102,5 @@ public class UserChatActivity extends AppCompatActivity {
             }
         });
     }
+
 }
