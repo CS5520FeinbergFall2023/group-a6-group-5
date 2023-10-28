@@ -18,6 +18,25 @@ public class StickerHistoryItemCard implements Parcelable {
         this.stickerSentCount = stickerSentCount;
     }
 
+    protected StickerHistoryItemCard(Parcel in) {
+        stickerThumbnailPath = in.readString();
+        stickerPrice = in.readFloat();
+        stickerName = in.readString();
+        stickerSentCount = in.readInt();
+    }
+
+    public static final Creator<StickerHistoryItemCard> CREATOR = new Creator<StickerHistoryItemCard>() {
+        @Override
+        public StickerHistoryItemCard createFromParcel(Parcel in) {
+            return new StickerHistoryItemCard(in);
+        }
+
+        @Override
+        public StickerHistoryItemCard[] newArray(int size) {
+            return new StickerHistoryItemCard[size];
+        }
+    };
+
     public String getStickerThumbnailPath() {
         return stickerThumbnailPath;
     }

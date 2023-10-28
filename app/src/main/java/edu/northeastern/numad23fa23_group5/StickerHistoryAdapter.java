@@ -1,10 +1,15 @@
 package edu.northeastern.numad23fa23_group5;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -12,7 +17,10 @@ public class StickerHistoryAdapter extends RecyclerView.Adapter<StickerHistoryRe
     private final ArrayList<StickerHistoryItemCard> itemList;
     private ItemClickListener listener;
 
-    public StickerHistoryAdapter(ArrayList<StickerHistoryItemCard> itemList) {
+    private Context context;
+
+    public StickerHistoryAdapter(Context context,ArrayList<StickerHistoryItemCard> itemList) {
+        this.context=context;
         this.itemList = itemList;
     }
 
@@ -23,17 +31,17 @@ public class StickerHistoryAdapter extends RecyclerView.Adapter<StickerHistoryRe
         return holder;
     }
 
-    public void setOnItemClickListener(ItemClickListener listener) {
-        this.listener = listener;
-    }
-
     @Override
     public void onBindViewHolder(StickerHistoryReviewHolder holder, int position) {
         StickerHistoryItemCard currentItem = itemList.get(position);
         holder.stickerSentCount.setText("Sent Count: "+currentItem.getStickerSentCount());
         holder.stickerName.setText(currentItem.getStickerName());
         holder.stickerPrice.setText("Price: $" + currentItem.getStickerPrice());
-        //todo:also a function to load picture from image info from the database
+        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(currentItem.getStickerThumbnailPath());
+        // Use Glide to load the image
+        Glide.with(context)
+                .load(storageRef)
+                .into(holder.stickerImage);
     }
 
     @Override

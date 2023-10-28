@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.northeastern.numad23fa23_group5.model.User;
+import edu.northeastern.numad23fa23_group5.model.UserModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                                     String userID = userSnapshot.getKey();
                                     intent.putExtra("userID", userID);
+                                    intent.putExtra("username", username);
+                                    startActivity(intent);
                                 }
                             } else {
                                 // Username does not exist, create a new user
@@ -76,9 +78,11 @@ public class MainActivity extends AppCompatActivity {
                                 //manually set fields
 //                                newUserRef.child("username").setValue(username);
                                 //or
-                                newUserRef.setValue(new User(username));
+                                newUserRef.setValue(new UserModel(username));
                                 intent.putExtra("userID", userId);
                                 Log.e("UserFirebase", userId + " " + username);
+                                intent.putExtra("username", username);
+                                startActivity(intent);
                             }
                         }
 
@@ -87,8 +91,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("UserFirebase", "error occurred when creating new user.");
                         }
                     });
-                    intent.putExtra("username", username);
-                    startActivity(intent);
+
                 } else {
                     Snackbar.make(findViewById(R.id.main_view), "Username can't be empty", Snackbar.LENGTH_LONG).show();
                 }

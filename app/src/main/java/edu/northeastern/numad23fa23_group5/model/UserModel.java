@@ -1,12 +1,12 @@
 package edu.northeastern.numad23fa23_group5.model;
 
-public class User {
+public class UserModel {
     public String username;
 
-    public User() {
+    public UserModel() {
     }
 
-    public User(String username) {
+    public UserModel(String username) {
         this.username = username;
     }
 }

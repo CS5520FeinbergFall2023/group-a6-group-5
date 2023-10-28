@@ -30,6 +30,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.northeastern.numad23fa23_group5.databinding.ActivityPersonalInfoBinding;
 
@@ -57,7 +59,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
         rLayoutManger = new GridLayoutManager(this, 2);
         recyclerView = findViewById(R.id.recyclerViewStickersSent);
         recyclerView.setHasFixedSize(true);
-        stickerHistoryAdapter = new StickerHistoryAdapter(itemList);
+        stickerHistoryAdapter = new StickerHistoryAdapter(this,itemList);
 //        ItemClickListener itemClickListener = new ItemClickListener() {
 //            @Override
 //            public void onItemLongClick(int position, Context context) {
@@ -82,83 +84,95 @@ public class PersonalInfoActivity extends AppCompatActivity {
         welcome.setText("Welcome! "+username);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String messageIdToFind = "message-id-1";
-
-        DatabaseReference messagesRef = database.getReference().child("sticker-messaging");
-        messagesRef=messagesRef.child("messages");
-        messagesRef=messagesRef.child("message-id-1");
-
-
-        DatabaseReference stickersRef = database.getReference().child("sticker-messaging").child("stickers");
-
-        stickersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference databaseRef = database.getReference().child("sticker-messaging");
+        //sticker ID -> send count of this user
+        Map<String, Integer> stickerUsageCounts = new HashMap<>();
+        // find messages sent by this user
+        databaseRef.child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot stickerSnapshot : dataSnapshot.getChildren()) {
-                        String imagePath = stickerSnapshot.child("image-path").getValue(String.class);
-                        double price = stickerSnapshot.child("price").getValue(Double.class);
+                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                    String senderID = messageSnapshot.child("senderID").getValue(String.class);
+                    // Check if the message was sent by the target user
+                    if (senderID != null && senderID.equals(userID)) {
+                        String stickerID = messageSnapshot.child("stickerID").getValue(String.class);
+                        if (stickerID != null) {
+                            stickerUsageCounts.put(stickerID, stickerUsageCounts.getOrDefault(stickerID, 0) + 1);
+                        }
+                    }
+                }
 
-                        if (imagePath != null) {
-                            Log.d("FirebaseDatabase", "Image Path: " + imagePath);
+                // sticker information
+                for (String stickerID : stickerUsageCounts.keySet()) {
+                    databaseRef.child("stickers").child(stickerID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String stickerImageURL = dataSnapshot.child("image").getValue(String.class);
+                            String stickerName = dataSnapshot.child("name").getValue(String.class);
+                            float stickerPrice = dataSnapshot.child("price").getValue(Float.class);
+                            int useCount=stickerUsageCounts.get(stickerID);
+                            itemList.add(new StickerHistoryItemCard(stickerImageURL,stickerPrice,stickerName,useCount));
+                            stickerHistoryAdapter.notifyItemInserted(itemList.size()-1);
                         }
 
-                        Log.d("FirebaseDatabase", "Price: " + price);
-                    }
-                } else {
-                    Log.d("FirebaseDatabase", "No data found for stickers");
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle error
+                        }
+                    });
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
+                // Handle error
             }
         });
 
 
 
-        String testData="{\n" +
-                "  \"result\": [\n" +
-                "    {\n" +
-                "      \"stickerName\": \"name1\",\n" +
-                "      \"stickerPrice\": 10,\n" +
-                "      \"stickerImageURL\": \"test\",\n" +
-                "      \"useCount\": 5,\n" +
-                "      \"userID\": 999\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"stickerName\": \"name2\",\n" +
-                "      \"stickerPrice\": 0.99,\n" +
-                "      \"stickerImageURL\": \"test\",\n" +
-                "      \"useCount\": 10,\n" +
-                "      \"userID\": 999\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"stickerName\": \"name3\",\n" +
-                "      \"stickerPrice\": 2,\n" +
-                "      \"stickerImageURL\": \"test\",\n" +
-                "      \"useCount\": 1,\n" +
-                "      \"userID\": 999\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
-        try {
-            JSONObject sampleJsonObject = new JSONObject(testData);
-            JSONArray sampleArray = sampleJsonObject.getJSONArray("result");
-            for (int i=0;i<sampleArray.length();i++)
-            {
-                String stickerName=sampleArray.getJSONObject(i).getString("stickerName");
-                float stickerPrice=Float.parseFloat(sampleArray.getJSONObject(i).getString("stickerPrice"));
-                int useCount=sampleArray.getJSONObject(i).getInt("useCount");
-                String stickerImageURL=sampleArray.getJSONObject(i).getString("stickerImageURL");
-                itemList.add(new StickerHistoryItemCard(stickerImageURL,stickerPrice,stickerName,useCount));
-                stickerHistoryAdapter.notifyItemInserted(itemList.size()-1);
-            }
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+//
+//        String testData="{\n" +
+//                "  \"result\": [\n" +
+//                "    {\n" +
+//                "      \"stickerName\": \"name1\",\n" +
+//                "      \"stickerPrice\": 10,\n" +
+//                "      \"stickerImageURL\": \"test\",\n" +
+//                "      \"useCount\": 5,\n" +
+//                "      \"userID\": 999\n" +
+//                "    },\n" +
+//                "    {\n" +
+//                "      \"stickerName\": \"name2\",\n" +
+//                "      \"stickerPrice\": 0.99,\n" +
+//                "      \"stickerImageURL\": \"test\",\n" +
+//                "      \"useCount\": 10,\n" +
+//                "      \"userID\": 999\n" +
+//                "    },\n" +
+//                "    {\n" +
+//                "      \"stickerName\": \"name3\",\n" +
+//                "      \"stickerPrice\": 2,\n" +
+//                "      \"stickerImageURL\": \"test\",\n" +
+//                "      \"useCount\": 1,\n" +
+//                "      \"userID\": 999\n" +
+//                "    }\n" +
+//                "  ]\n" +
+//                "}";
+//        try {
+//            JSONObject sampleJsonObject = new JSONObject(testData);
+//            JSONArray sampleArray = sampleJsonObject.getJSONArray("result");
+//            for (int i=0;i<sampleArray.length();i++)
+//            {
+//                String stickerName=sampleArray.getJSONObject(i).getString("stickerName");
+//                float stickerPrice=Float.parseFloat(sampleArray.getJSONObject(i).getString("stickerPrice"));
+//                int useCount=sampleArray.getJSONObject(i).getInt("useCount");
+//                String stickerImageURL=sampleArray.getJSONObject(i).getString("stickerImageURL");
+//                itemList.add(new StickerHistoryItemCard(stickerImageURL,stickerPrice,stickerName,useCount));
+//                stickerHistoryAdapter.notifyItemInserted(itemList.size()-1);
+//            }
+//        }catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
 
         // Perform item selected listener
         BottomNavigationView bottomNavigationView=findViewById(R.id.nav_view);
