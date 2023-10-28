@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -77,7 +78,8 @@ public class PersonalInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String userID= intent!=null&&intent.hasExtra("userID")?intent.getStringExtra("userID"):"defaultUserID";
         final String username= intent!=null&&intent.hasExtra("username")?intent.getStringExtra("username"):"defaultUsername";
-
+        TextView welcome=findViewById(R.id.text_view_welcome);
+        welcome.setText("Welcome! "+username);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String messageIdToFind = "message-id-1";

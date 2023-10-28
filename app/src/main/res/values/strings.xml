@@ -19,5 +19,6 @@
     <string name="title_home">Home</string>
     <string name="title_personal">Personal</string>
     <string name="title_chat">Chat</string>
+    <string name="welcome_personal_string">Hello! username</string>
 
 </resources>
