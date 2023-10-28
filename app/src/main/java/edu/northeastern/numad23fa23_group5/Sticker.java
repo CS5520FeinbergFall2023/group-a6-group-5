@@ -2,16 +2,16 @@ package edu.northeastern.numad23fa23_group5;
 
 public class Sticker {
     private String name;
-    private String imageUrl;
+    private String image;
     private double price;
     private int sentCount;  // Number of times the sticker has been sent
 
     // Default constructor required for Firebase
     public Sticker() {}
 
-    public Sticker(String name, String imageUrl, double price) {
+    public Sticker(String name, String image, double price) {
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.price = price;
         this.sentCount = 0;  // Initially, the sticker hasn't been sent
     }
@@ -26,12 +26,12 @@ public class Sticker {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public double getPrice() {

@@ -39,7 +39,7 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
         // Use Glide to load the image
         Glide.with(context)
-                .load(sticker.getImageUrl())
+                .load(sticker.getImage())
                 .into(holder.ivStickerItem);
     }
 

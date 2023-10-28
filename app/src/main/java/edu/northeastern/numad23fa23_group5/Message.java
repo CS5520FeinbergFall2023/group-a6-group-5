@@ -1,45 +1,45 @@
 package edu.northeastern.numad23fa23_group5;
 
 public class Message {
-    private String sender;
-    private String receiver;
-    private String stickerName;
+    private String from;
+    private String to;
+    private String sticker;
     private String timestamp;  // Timestamp when the message was sent
 
     // Default constructor required for Firebase
     public Message() {}
 
-    public Message(String sender, String receiver, String stickerName, String timestamp) {
-        this.sender = sender;
-        this.receiver = receiver;
-        this.stickerName = stickerName;
+    public Message(String from, String to, String sticker, String timestamp) {
+        this.from = from;
+        this.to = to;
+        this.sticker = sticker;
         this.timestamp = timestamp;
     }
 
     // Getters and Setters
 
-    public String getSender() {
-        return sender;
+    public String getFrom() {
+        return from;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public String getTo() {
+        return to;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setTo(String to) {
+        this.to = to;
     }
 
-    public String getStickerName() {
-        return stickerName;
+    public String getSticker() {
+        return sticker;
     }
 
-    public void setStickerName(String stickerName) {
-        this.stickerName = stickerName;
+    public void setSticker(String sticker) {
+        this.sticker = sticker;
     }
 
     public String getTimestamp() {
