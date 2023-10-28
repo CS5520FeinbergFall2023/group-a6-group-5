@@ -24,10 +24,15 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         BottomNavigationView bottomNavigationView=findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_chat);
+
+        Intent intent = getIntent();
+        final String userID= intent!=null&&intent.hasExtra("userID")?intent.getStringExtra("userID"):"defaultUserID";
+        final String username= intent!=null&&intent.hasExtra("username")?intent.getStringExtra("username"):"defaultUsername";
 
         // Perform item selected listener
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener () {
@@ -43,8 +48,10 @@ public class ChatActivity extends AppCompatActivity {
                     case R.id.navigation_chat:
                         return true;
                     case R.id.navigation_personal:
-                        startActivity(new Intent(getApplicationContext(),PersonalInfoActivity.class));
-                        overridePendingTransition(0,0);
+                        Intent intent=new Intent(getApplicationContext(),PersonalInfoActivity.class);
+                        intent.putExtra("userID", userID);
+                        intent.putExtra("username", username);
+                        startActivity(intent);
                         return true;
                 }
                 return false;

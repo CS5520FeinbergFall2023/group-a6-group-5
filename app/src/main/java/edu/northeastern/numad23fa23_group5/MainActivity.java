@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("UserFirebase", "error occurred when creating new user.");
                         }
                     });
-                    intent.putExtra("userID", username);
+                    intent.putExtra("username", username);
                     startActivity(intent);
                 } else {
                     Snackbar.make(findViewById(R.id.main_view), "Username can't be empty", Snackbar.LENGTH_LONG).show();

@@ -74,8 +74,10 @@ public class PersonalInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_personal_info);
         init(savedInstanceState);
 
-        //todo:should be getting actual data from database
-        //        Intent intent = getIntent();
+        Intent intent = getIntent();
+        final String userID= intent!=null&&intent.hasExtra("userID")?intent.getStringExtra("userID"):"defaultUserID";
+        final String username= intent!=null&&intent.hasExtra("username")?intent.getStringExtra("username"):"defaultUsername";
+
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String messageIdToFind = "message-id-1";
@@ -148,7 +150,6 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 float stickerPrice=Float.parseFloat(sampleArray.getJSONObject(i).getString("stickerPrice"));
                 int useCount=sampleArray.getJSONObject(i).getInt("useCount");
                 String stickerImageURL=sampleArray.getJSONObject(i).getString("stickerImageURL");
-                String userID=sampleArray.getJSONObject(i).getString("userID");
                 itemList.add(new StickerHistoryItemCard(stickerImageURL,stickerPrice,stickerName,useCount));
                 stickerHistoryAdapter.notifyItemInserted(itemList.size()-1);
             }
@@ -167,11 +168,17 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 switch(item.getItemId())
                 {
                     case R.id.navigation_home:
+                        //take as logging out when navigate back to home
+                        //don't pass down username and ID
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.navigation_chat:
-                        startActivity(new Intent(getApplicationContext(),ChatActivity.class));
+                        //pass down username and userID
+                        Intent intent=new Intent(getApplicationContext(),ChatActivity.class);
+                        intent.putExtra("userID", userID);
+                        intent.putExtra("username", username);
+                        startActivity(intent);
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.navigation_personal:
