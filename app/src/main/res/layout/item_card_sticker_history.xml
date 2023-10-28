@@ -17,15 +17,16 @@
         <!-- Image -->
         <ImageView
             android:id="@+id/stickerImageView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:src="@drawable/ic_launcher_foreground"
         />
 
         <!-- Sticker Name -->
         <TextView
             android:id="@+id/stickerNameTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sticker Name"
             android:textSize="18sp"
@@ -35,7 +36,7 @@
         <!-- Sticker Price -->
         <TextView
             android:id="@+id/stickerPriceTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Price: $0.99"
             android:textSize="14sp"
@@ -44,7 +45,7 @@
         <!-- Sent Count -->
         <TextView
             android:id="@+id/sentCountTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sent Count: 1"
             android:textSize="14sp"
