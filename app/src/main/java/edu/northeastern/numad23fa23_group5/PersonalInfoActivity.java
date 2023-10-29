@@ -2,6 +2,7 @@ package edu.northeastern.numad23fa23_group5;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -41,32 +42,13 @@ public class PersonalInfoActivity extends AppCompatActivity {
     private StickerHistoryAdapter stickerHistoryAdapter;
     private RecyclerView.LayoutManager rLayoutManger;
 
-    private static final String KEY_ITEM_LIST = "KEY_ITEM_LIST";
-
-    private void init(Bundle savedInstanceState) {
-        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_ITEM_LIST)) {
-            itemList = savedInstanceState.getParcelableArrayList(KEY_ITEM_LIST);
-        }
-        createRecyclerView();
-    }
-
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(KEY_ITEM_LIST, itemList);
-    }
-
     private void createRecyclerView() {
-        rLayoutManger = new GridLayoutManager(this, 2);
+        // Get the device's current orientation
+        int orientation = getResources().getConfiguration().orientation;
+        rLayoutManger = (orientation == Configuration.ORIENTATION_PORTRAIT)?new GridLayoutManager(this, 2):new GridLayoutManager(this, 4);
         recyclerView = findViewById(R.id.recyclerViewStickersSent);
         recyclerView.setHasFixedSize(true);
         stickerHistoryAdapter = new StickerHistoryAdapter(this,itemList);
-//        ItemClickListener itemClickListener = new ItemClickListener() {
-//            @Override
-//            public void onItemLongClick(int position, Context context) {
-//
-//            }
-//        };
-//        stickerHistoryAdapter.setOnItemClickListener(itemClickListener);
         recyclerView.setAdapter(stickerHistoryAdapter);
         recyclerView.setLayoutManager(rLayoutManger);
     }
@@ -75,8 +57,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_info);
-        init(savedInstanceState);
-
+        createRecyclerView();
         Intent intent = getIntent();
         final String userID= intent!=null&&intent.hasExtra("userID")?intent.getStringExtra("userID"):"defaultUserID";
         final String username= intent!=null&&intent.hasExtra("username")?intent.getStringExtra("username"):"defaultUsername";
@@ -128,51 +109,6 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 // Handle error
             }
         });
-
-
-
-//
-//        String testData="{\n" +
-//                "  \"result\": [\n" +
-//                "    {\n" +
-//                "      \"stickerName\": \"name1\",\n" +
-//                "      \"stickerPrice\": 10,\n" +
-//                "      \"stickerImageURL\": \"test\",\n" +
-//                "      \"useCount\": 5,\n" +
-//                "      \"userID\": 999\n" +
-//                "    },\n" +
-//                "    {\n" +
-//                "      \"stickerName\": \"name2\",\n" +
-//                "      \"stickerPrice\": 0.99,\n" +
-//                "      \"stickerImageURL\": \"test\",\n" +
-//                "      \"useCount\": 10,\n" +
-//                "      \"userID\": 999\n" +
-//                "    },\n" +
-//                "    {\n" +
-//                "      \"stickerName\": \"name3\",\n" +
-//                "      \"stickerPrice\": 2,\n" +
-//                "      \"stickerImageURL\": \"test\",\n" +
-//                "      \"useCount\": 1,\n" +
-//                "      \"userID\": 999\n" +
-//                "    }\n" +
-//                "  ]\n" +
-//                "}";
-//        try {
-//            JSONObject sampleJsonObject = new JSONObject(testData);
-//            JSONArray sampleArray = sampleJsonObject.getJSONArray("result");
-//            for (int i=0;i<sampleArray.length();i++)
-//            {
-//                String stickerName=sampleArray.getJSONObject(i).getString("stickerName");
-//                float stickerPrice=Float.parseFloat(sampleArray.getJSONObject(i).getString("stickerPrice"));
-//                int useCount=sampleArray.getJSONObject(i).getInt("useCount");
-//                String stickerImageURL=sampleArray.getJSONObject(i).getString("stickerImageURL");
-//                itemList.add(new StickerHistoryItemCard(stickerImageURL,stickerPrice,stickerName,useCount));
-//                stickerHistoryAdapter.notifyItemInserted(itemList.size()-1);
-//            }
-//        }catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
 
         // Perform item selected listener
         BottomNavigationView bottomNavigationView=findViewById(R.id.nav_view);
