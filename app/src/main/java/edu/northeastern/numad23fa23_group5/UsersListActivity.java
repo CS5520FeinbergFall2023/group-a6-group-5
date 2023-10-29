@@ -23,6 +23,7 @@ public class UsersListActivity extends AppCompatActivity {
     private UsersAdapter usersAdapter;
     private List<String> userIDs = new ArrayList<>();
     private List<String> usernames = new ArrayList<>();
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +33,15 @@ public class UsersListActivity extends AppCompatActivity {
         recyclerViewUsers = findViewById(R.id.recycler_view_users);
         recyclerViewUsers.setLayoutManager(new LinearLayoutManager(this));
         usersAdapter = new UsersAdapter(usernames);
+        currentUserId = getIntent().getStringExtra("currentUserId");
+
 
         // Set the item click listener
         usersAdapter.setOnItemClickListener(new UsersAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 String selectedUserID = userIDs.get(position);
+//                System.out.println(selectedUserID);
                 openChatWithUser(selectedUserID);
             }
         });
@@ -70,9 +74,10 @@ public class UsersListActivity extends AppCompatActivity {
     }
 
     // Method to open the chat interface for the selected user using their userID
-    private void openChatWithUser(String userID) {
+    private void openChatWithUser(String selectedUserID) {
         Intent intent = new Intent(UsersListActivity.this, UserChatActivity.class);
-        intent.putExtra("selectedUserID", userID);
+        intent.putExtra("selectedUserID", selectedUserID);
+        intent.putExtra("loggedInUserID", currentUserId);  // Pass the logged-in user's ID
         startActivity(intent);
     }
 

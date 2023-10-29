@@ -59,8 +59,10 @@ public class ChatActivity extends AppCompatActivity {
         FloatingActionButton fabShowUsers = findViewById(R.id.fabUserList);
         fabShowUsers.setOnClickListener(v -> {
             Intent usersIntent = new Intent(ChatActivity.this, UsersListActivity.class);
+            usersIntent.putExtra("currentUserId", currentUserId);  // Pass the current logged-in user's ID
             startActivity(usersIntent);
         });
+
 
         // Set up chat history RecyclerView
         RecyclerView chatHistoryRecyclerView = findViewById(R.id.chatHistory);
