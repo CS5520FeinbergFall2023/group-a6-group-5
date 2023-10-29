@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,7 +61,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
 
         loggedInUserID = getIntent().getStringExtra("loggedInUserID");
         selectedUserID = getIntent().getStringExtra("selectedUserID");
-        System.out.println(selectedUserID);
+//        System.out.println(selectedUserID);
 
         recyclerViewChat = findViewById(R.id.recycler_view_chat);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -95,8 +96,8 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         fetchChatHistoryFromFirebase();
         fetchStickersFromFirebase();
 
-        Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
-        Log.d("UserChatActivity", "loggedInUserID: " + loggedInUserID);
+//        Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
+//        Log.d("UserChatActivity", "loggedInUserID: " + loggedInUserID);
 
         createNotificationChannel();
 
@@ -235,6 +236,12 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
             }
         }
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
 
 
     // Implement the getCurrentTimestamp method as follows
