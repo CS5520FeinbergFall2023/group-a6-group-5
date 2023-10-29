@@ -1,6 +1,8 @@
 package edu.northeastern.numad23fa23_group5;
 
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,6 +50,10 @@ public class UserChatActivity extends AppCompatActivity {
 
         fetchChatHistoryFromFirebase();
         fetchStickersFromFirebase();
+
+        Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
+        Log.d("UserChatActivity", "loggedInUserID: " + loggedInUserID);
+
     }
 
     private void fetchChatHistoryFromFirebase() {

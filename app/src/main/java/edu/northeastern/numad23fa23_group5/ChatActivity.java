@@ -70,6 +70,7 @@ public class ChatActivity extends AppCompatActivity {
             String selectedUserId = chatUsersList.get(position).first;
             Intent chatIntent = new Intent(ChatActivity.this, UserChatActivity.class);
             chatIntent.putExtra("selectedUserID", selectedUserId);
+            chatIntent.putExtra("loggedInUserID", currentUserId);
             startActivity(chatIntent);
         });
 
