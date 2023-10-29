@@ -89,9 +89,6 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
         Log.d("UserChatActivity", "loggedInUserID: " + loggedInUserID);
 
-        // showNotification("Test Sender");
-        // Log.d("Notification Triggered","Notification triggered");
-
         createNotificationChannel();
 
     }
@@ -273,47 +270,17 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         notificationManager.notify(1, builder.build());
 }
 
+// Keeping the listeners whenever the activity is active
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fetchChatHistoryFromFirebase();
+        // ... any other setup that should happen when the activity starts
+    }
 
-
-
-
-//Notification method
-/* private void showNotification(String senderName) {
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("New Sticker Received")
-            .setContentText(senderName + " sent you a sticker!")
-            .setPriority(NotificationCompat.PRIORITY_HIGH);
-
-    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    manager.notify(1, builder.build());
-} */
-
-
-
-    // Notification method
-    /*private void showNotification(String senderName) {
-        String channelId = "stickerChannel";
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)  // Change this to an appropriate icon
-                .setContentTitle("New Sticker Received")
-                .setContentText(senderName + " sent you a sticker!")
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-
-        Intent notificationIntent = new Intent(this, UserChatActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Sticker Channel",
-                    NotificationManager.IMPORTANCE_HIGH);
-            manager.createNotificationChannel(channel);
-        }
-        manager.notify(1, builder.build());
-    } */
-
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Do NOT remove Firebase listeners here
+    }
 }
