@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -35,10 +37,11 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
         Sticker sticker = stickerList.get(position);
         holder.tvStickerName.setText(sticker.getName());
         holder.tvStickerPrice.setText("$" + sticker.getPrice());
+        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(sticker.getImage());
 
         // Use Glide to load the image
         Glide.with(context)
-                .load(sticker.getImage())
+                .load(storageRef)
                 .into(holder.ivStickerItem);
     }
 
