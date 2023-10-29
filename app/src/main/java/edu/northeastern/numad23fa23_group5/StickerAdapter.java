@@ -19,10 +19,16 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
     private List<Sticker> stickerList;
     private Context context;
+    private MessageSender messageSender;
 
-    public StickerAdapter(Context context, List<Sticker> stickerList) {
+    public StickerAdapter(Context context, List<Sticker> stickerList, UserChatActivity userChatActivity) {
         this.context = context;
         this.stickerList = stickerList;
+        this.messageSender = userChatActivity;;
+    }
+
+    public interface MessageSender {
+        void sendMessage(String selectedStickerID);
     }
 
     @NonNull
@@ -43,6 +49,15 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
         Glide.with(context)
                 .load(storageRef)
                 .into(holder.ivStickerItem);
+
+        holder.itemView.setOnClickListener(v -> {
+            // Implement the functionality to send the selected sticker in the chat
+            if (sticker != null && messageSender != null) {
+                Long selectedStickerID = sticker.getId(); // Access the sticker ID (id field)
+                // Call the sendMessage method via the callback
+                messageSender.sendMessage(selectedStickerID.toString()); // Convert Long to String
+            }
+        });
     }
 
     @Override
