@@ -62,10 +62,9 @@ public class UserChatActivity extends AppCompatActivity {
 
                 for (DataSnapshot messageIDSnapshot : dataSnapshot.getChildren()) {
                     Message message = messageIDSnapshot.getValue(Message.class);
-                    if (message != null && (message.getSenderID().equals(loggedInUserID)
-                            || message.getReceiverID().equals(loggedInUserID))
-                            && (message.getSenderID().equals(selectedUserID)
-                            || message.getReceiverID().equals(selectedUserID))) {
+                    if (message != null &&
+                            ((message.getSenderID().equals(loggedInUserID) && message.getReceiverID().equals(selectedUserID)) ||
+                                    (message.getSenderID().equals(selectedUserID) && message.getReceiverID().equals(loggedInUserID)))) {
                         chatHistory.add(message);
                         fetchAndSetUserName(message, () -> {
                             if (remainingCalls.decrementAndGet() == 0) {
