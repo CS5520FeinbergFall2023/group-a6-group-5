@@ -9,6 +9,7 @@ public class Message {
     private String receiverID;
     private String stickerID;
     private String timestamp;  // Timestamp when the message was sent
+    private String senderUsername;
 
     // Default constructor required for Firebase
     public Message() {}
@@ -21,6 +22,13 @@ public class Message {
     }
 
     // Getters and Setters
+
+    public String getSenderUsername() {
+        return senderUsername;
+    }
+    public void setSenderUsername(String senderUsername) {
+        this.senderUsername = senderUsername;
+    }
 
     public String getSenderID() {
         return senderID;

@@ -13,6 +13,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class UserChatActivity extends AppCompatActivity {
 
@@ -53,16 +55,21 @@ public class UserChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatHistory.clear();
+                AtomicInteger remainingCalls = new AtomicInteger((int) dataSnapshot.getChildrenCount());  // Count of remaining username fetch operations
+
                 for (DataSnapshot messageIDSnapshot : dataSnapshot.getChildren()) {
                     Message message = messageIDSnapshot.getValue(Message.class);
                     if (message != null && (message.getSenderID().equals(selectedUserID) || message.getReceiverID().equals(selectedUserID))) {
                         chatHistory.add(message);
+                        fetchAndSetUserName(message, () -> {
+                            if (remainingCalls.decrementAndGet() == 0) {
+                                // Sorting by timestamp
+                                Collections.sort(chatHistory, (m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
+                                chatAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
                 }
-
-                // Sorting by timestamp
-                Collections.sort(chatHistory, (m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
-                chatAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -71,6 +78,26 @@ public class UserChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Method to fetch the username and set it in the Message object
+    private void fetchAndSetUserName(Message message, Runnable onComplete) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("sticker-messaging").child("users").child(message.getSenderID());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String username = dataSnapshot.child("username").getValue(String.class);
+                message.setSenderUsername(username);  // Set the username in the Message object
+                onComplete.run();  // Notify that this operation is complete
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+                onComplete.run();  // Still notify that this operation is complete to not block other operations
+            }
+        });
+    }
+
 
     private void fetchStickersFromFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();

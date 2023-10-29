@@ -33,7 +33,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Message currentMessage = chatHistory.get(position);
-        holder.senderTextView.setText(currentMessage.getSenderID());
+
+        holder.senderTextView.setText(currentMessage.getSenderUsername());  // Display sender's username
         holder.timestampTextView.setText(currentMessage.getTimestamp());
 
         Sticker sticker = findStickerByName(currentMessage.getStickerID());
@@ -41,6 +42,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             Glide.with(context).load(sticker.getImage()).into(holder.stickerImageView);
         }
     }
+
 
     // Helper function to fetch the Sticker object based on its name
     private Sticker findStickerByName(String name) {
@@ -58,15 +60,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         return chatHistory.size();
     }
 
-    // Helper function to fetch the Sticker object based on its name
-//    private Sticker findStickerByName(String name) {
-//        for (Sticker sticker : stickers) {
-//            if (sticker.getName().equals(name)) {
-//                return sticker;
-//            }
-//        }
-//        return null;
-//    }
 
     static class ChatViewHolder extends RecyclerView.ViewHolder {
         TextView senderTextView;
