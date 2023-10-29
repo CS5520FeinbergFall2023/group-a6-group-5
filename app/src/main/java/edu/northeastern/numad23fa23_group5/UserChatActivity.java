@@ -239,6 +239,8 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
     //Notification method
     private void showNotification(String senderName) {
         Intent intent = new Intent(this, UserChatActivity.class);
+        intent.putExtra("loggedInUserID", loggedInUserID);
+        intent.putExtra("selectedUserID", selectedUserID);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         PendingIntent pendingIntent;
@@ -272,19 +274,4 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         notificationManager.notify(1, builder.build());
 }
 
-// Keeping the listeners whenever the activity is active
-
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        fetchChatHistoryFromFirebase();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-     */
 }
