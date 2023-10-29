@@ -8,19 +8,6 @@
     android:paddingTop="?attr/actionBarSize">
 
 
-    <TextView
-        android:id="@+id/text_view_welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Your chats"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
@@ -31,6 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fabUserList"
         app:menu="@menu/bottom_nav_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -41,8 +29,19 @@
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_welcome"
+        app:layout_constraintTop_toBottomOf="@id/chatHistory"
         app:srcCompat="@android:drawable/ic_input_add" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatHistory"
+        android:layout_width="409dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fabUserList"
+        tools:layout_editor_absoluteX="2dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
