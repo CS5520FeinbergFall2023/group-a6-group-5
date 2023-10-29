@@ -1,5 +1,16 @@
 package edu.northeastern.numad23fa23_group5;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,6 +18,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +50,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
     private String loggedInUserID;
 
     private Sticker selectedSticker;
+    private static final String CHANNEL_ID = "stickerChannel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +89,25 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
         Log.d("UserChatActivity", "loggedInUserID: " + loggedInUserID);
 
+        // showNotification("Test Sender");
+        // Log.d("Notification Triggered","Notification triggered");
+
+        createNotificationChannel();
+
+    }
+
+    //creating a notification channel
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Sticker Notification";
+            String description = "Notifications related to stickers";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     private void fetchChatHistoryFromFirebase() {
@@ -94,6 +126,10 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
                         // Sorting by timestamp
                         Collections.sort(chatHistory, (m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
                         chatAdapter.notifyDataSetChanged();
+                        //adding new snippet for notification to work
+                        if (message.getReceiverID().equals(loggedInUserID)) { // if the current user is the receiver of the message
+                            showNotification(message.getSenderUsername());  // Notify for the received sticker
+                        }
                     });
                 }
             }
@@ -201,5 +237,83 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         Date currentDate = new Date();
         return sdf.format(currentDate);
     }
+
+    //Notification method
+    private void showNotification(String senderName) {
+        Intent intent = new Intent(this, UserChatActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("New Sticker Received")
+                .setContentText(senderName + " sent you a sticker!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        notificationManager.notify(1, builder.build());
+}
+
+
+
+
+
+//Notification method
+/* private void showNotification(String senderName) {
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("New Sticker Received")
+            .setContentText(senderName + " sent you a sticker!")
+            .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    manager.notify(1, builder.build());
+} */
+
+
+
+    // Notification method
+    /*private void showNotification(String senderName) {
+        String channelId = "stickerChannel";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)  // Change this to an appropriate icon
+                .setContentTitle("New Sticker Received")
+                .setContentText(senderName + " sent you a sticker!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        Intent notificationIntent = new Intent(this, UserChatActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Sticker Channel",
+                    NotificationManager.IMPORTANCE_HIGH);
+            manager.createNotificationChannel(channel);
+        }
+        manager.notify(1, builder.build());
+    } */
+
 
 }
