@@ -20,12 +20,21 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
     private List<Sticker> stickerList;
     private Context context;
     private MessageSender messageSender;
+    private int selectedStickerPosition = -1;
+
+    private Sticker selectedSticker = null;
+
 
     public StickerAdapter(Context context, List<Sticker> stickerList, UserChatActivity userChatActivity) {
         this.context = context;
         this.stickerList = stickerList;
-        this.messageSender = userChatActivity;;
+        this.messageSender = userChatActivity;
     }
+
+    public Sticker getSelectedSticker() {
+        return selectedSticker;
+    }
+
 
     public interface MessageSender {
         void sendMessage(String selectedStickerID);
@@ -50,14 +59,25 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
                 .load(storageRef)
                 .into(holder.ivStickerItem);
 
+        // Check if this sticker is selected
+        if (position == selectedStickerPosition) {
+            // Implement the visual indication for the selected sticker
+            // For example, you can change the background color or border of the selected sticker.
+            // You might need to define a different background for selected and unselected stickers.
+            holder.itemView.setBackgroundResource(R.drawable.selected_sticker_background); // Use your own resource here
+        } else {
+            // Reset the background for unselected stickers
+            holder.itemView.setBackgroundResource(0); // Remove any background
+        }
+
         holder.itemView.setOnClickListener(v -> {
-            // Implement the functionality to send the selected sticker in the chat
-            if (sticker != null && messageSender != null) {
-                Long selectedStickerID = sticker.getId(); // Access the sticker ID (id field)
-                // Call the sendMessage method via the callback
-                messageSender.sendMessage(selectedStickerID.toString()); // Convert Long to String
+            // Implement the functionality to select the sticker
+            if (sticker != null) {
+                selectedSticker = sticker; // Update the selected sticker
+                notifyDataSetChanged(); // Refresh the RecyclerView to update the visuals
             }
         });
+
     }
 
     @Override

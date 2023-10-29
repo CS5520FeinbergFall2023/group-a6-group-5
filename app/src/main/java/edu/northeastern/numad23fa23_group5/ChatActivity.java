@@ -38,6 +38,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         currentUserId = intent != null && intent.hasExtra("userID") ? intent.getStringExtra("userID") : "defaultUserID";
+        String currentUsername = intent != null && intent.hasExtra("username") ? intent.getStringExtra("username") : "defaultUsername";
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -50,6 +51,7 @@ public class ChatActivity extends AppCompatActivity {
                 case R.id.navigation_personal:
                     Intent personalIntent = new Intent(getApplicationContext(), PersonalInfoActivity.class);
                     personalIntent.putExtra("userID", currentUserId);
+                    personalIntent.putExtra("username", currentUsername);
                     startActivity(personalIntent);
                     return true;
             }

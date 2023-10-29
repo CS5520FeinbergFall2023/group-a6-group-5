@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,7 +64,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
 
         loggedInUserID = getIntent().getStringExtra("loggedInUserID");
         selectedUserID = getIntent().getStringExtra("selectedUserID");
-        System.out.println(selectedUserID);
+//        System.out.println(selectedUserID);
 
         recyclerViewChat = findViewById(R.id.recycler_view_chat);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -80,10 +81,18 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call the sendMessage method when the send button is clicked
-                sendMessage(selectedSticker != null ? selectedSticker.getId().toString() : null);
+                // Check if a sticker is selected
+                if (stickerAdapter.getSelectedSticker() != null) {
+                    Sticker selectedSticker = stickerAdapter.getSelectedSticker();
+                    // Call the sendMessage method with the selected sticker ID
+                    sendMessage(selectedSticker.getId().toString());
+                } else {
+                    // Handle the case where no sticker is selected
+                    // You can display a message to the user or take appropriate action.
+                }
             }
         });
+
 
         selectedSticker = null;
 
@@ -91,8 +100,8 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         fetchChatHistoryInitialCount();
         fetchStickersFromFirebase();
 
-        Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
-        Log.d("UserChatActivity", "loggedInUserID: " + loggedInUserID);
+//        Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
+//        Log.d("UserChatActivity", "loggedInUserID: " + loggedInUserID);
 
         createNotificationChannel();
 
@@ -258,6 +267,12 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
             }
         }
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
 
 
     // Implement the getCurrentTimestamp method as follows
