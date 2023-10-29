@@ -1,6 +1,7 @@
 package edu.northeastern.numad23fa23_group5;
 
 public class Sticker {
+    private Long id;
     private String name;
     private String image;
     private double price;
@@ -9,14 +10,25 @@ public class Sticker {
     // Default constructor required for Firebase
     public Sticker() {}
 
-    public Sticker(String name, String image, double price) {
+    public Sticker(Long id, String name, String image, double price) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.price = price;
         this.sentCount = 0;  // Initially, the sticker hasn't been sent
     }
 
+
     // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 
     public String getName() {
         return name;

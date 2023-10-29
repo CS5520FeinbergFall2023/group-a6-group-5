@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
@@ -34,25 +37,37 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Message currentMessage = chatHistory.get(position);
 
-        holder.senderTextView.setText(currentMessage.getSenderUsername());  // Display sender's username
+        holder.senderTextView.setText(currentMessage.getSenderUsername());
         holder.timestampTextView.setText(currentMessage.getTimestamp());
-
-        Sticker sticker = findStickerByName(currentMessage.getStickerID());
+        Sticker sticker = findStickerByID(currentMessage.getStickerID());
         if (sticker != null) {
-            Glide.with(context).load(sticker.getImage()).into(holder.stickerImageView);
+            StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(sticker.getImage());
+            Glide.with(context)
+                    .load(storageRef)
+                    .into(holder.stickerImage);  // Adjusted this line
         }
     }
 
 
+
+
     // Helper function to fetch the Sticker object based on its name
-    private Sticker findStickerByName(String name) {
+    private Sticker findStickerByID(String stickerID) {
+        Long stickerIdLong;
+        try {
+            stickerIdLong = Long.parseLong(stickerID);
+        } catch (NumberFormatException e) {
+            return null;  // If stickerID is not a valid Long representation, return null
+        }
+
         for (Sticker sticker : stickers) {
-            if (sticker.getName().equals(name)) {
+            if (sticker.getId().equals(stickerIdLong)) {
                 return sticker;
             }
         }
         return null;
     }
+
 
 
     @Override
@@ -63,14 +78,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     static class ChatViewHolder extends RecyclerView.ViewHolder {
         TextView senderTextView;
-        ImageView stickerImageView;
+        ImageView stickerImage;  // Renamed this from stickerImageView to stickerImage
         TextView timestampTextView;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
             senderTextView = itemView.findViewById(R.id.tv_sender);
-            stickerImageView = itemView.findViewById(R.id.iv_sticker);
+            stickerImage = itemView.findViewById(R.id.iv_sticker);  // Adjusted this line
             timestampTextView = itemView.findViewById(R.id.tv_timestamp);
         }
     }
+
 }
