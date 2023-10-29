@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -249,6 +250,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_decor))  // This sets the large icon, usually placed to the left of the title & content text
                 .setContentTitle("New Sticker Received")
                 .setContentText(senderName + " sent you a sticker!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -271,16 +273,18 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
 }
 
 // Keeping the listeners whenever the activity is active
+
+    /*
     @Override
     protected void onStart() {
         super.onStart();
         fetchChatHistoryFromFirebase();
-        // ... any other setup that should happen when the activity starts
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        // Do NOT remove Firebase listeners here
     }
+
+     */
 }
