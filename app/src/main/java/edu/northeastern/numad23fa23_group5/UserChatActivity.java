@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,27 +82,35 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference messagesRef = database.getReference("sticker-messaging").child("messages");
 
-        messagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        messagesRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                chatHistory.clear();
-                AtomicInteger remainingCalls = new AtomicInteger((int) dataSnapshot.getChildrenCount());  // Count of remaining username fetch operations
-
-                for (DataSnapshot messageIDSnapshot : dataSnapshot.getChildren()) {
-                    Message message = messageIDSnapshot.getValue(Message.class);
-                    if (message != null &&
-                            ((message.getSenderID().equals(loggedInUserID) && message.getReceiverID().equals(selectedUserID)) ||
-                                    (message.getSenderID().equals(selectedUserID) && message.getReceiverID().equals(loggedInUserID)))) {
-                        chatHistory.add(message);
-                        fetchAndSetUserName(message, () -> {
-                            if (remainingCalls.decrementAndGet() == 0) {
-                                // Sorting by timestamp
-                                Collections.sort(chatHistory, (m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
-                                chatAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
+                Message message = dataSnapshot.getValue(Message.class);
+                if (message != null &&
+                        ((message.getSenderID().equals(loggedInUserID) && message.getReceiverID().equals(selectedUserID)) ||
+                                (message.getSenderID().equals(selectedUserID) && message.getReceiverID().equals(loggedInUserID)))) {
+                    chatHistory.add(message);
+                    fetchAndSetUserName(message, () -> {
+                        // Sorting by timestamp
+                        Collections.sort(chatHistory, (m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
+                        chatAdapter.notifyDataSetChanged();
+                    });
                 }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
+                // Handle changes to existing messages (if needed)
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                // Handle message removal (if needed)
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
+                // Handle message movement (if needed)
             }
 
             @Override
@@ -109,6 +119,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
             }
         });
     }
+
 
     // Method to fetch the username and set it in the Message object
     private void fetchAndSetUserName(Message message, Runnable onComplete) {
