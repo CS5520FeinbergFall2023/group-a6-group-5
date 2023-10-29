@@ -54,6 +54,9 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
     private Sticker selectedSticker;
     private static final String CHANNEL_ID = "stickerChannel";
 
+    private int currentMessageCount = 0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +96,8 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
 
         selectedSticker = null;
 
-        fetchChatHistoryFromFirebase();
+        // New method to fetch initial chat count
+        fetchChatHistoryInitialCount();
         fetchStickersFromFirebase();
 
 //        Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
@@ -111,16 +115,41 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
-
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
 
-    private void fetchChatHistoryFromFirebase() {
+
+    // Method to fetch initial count of the messages
+    private void fetchChatHistoryInitialCount() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference messagesRef = database.getReference("sticker-messaging").child("messages");
 
+        messagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                    Message message = messageSnapshot.getValue(Message.class);
+                    if (message != null &&
+                            ((message.getSenderID().equals(loggedInUserID) && message.getReceiverID().equals(selectedUserID)) ||
+                                    (message.getSenderID().equals(selectedUserID) && message.getReceiverID().equals(loggedInUserID)))) {
+                        currentMessageCount++;
+                    }
+                }
+                attachChildEventListener(messagesRef);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
+    }
+
+    // Method to add notifications when a new sticker is received
+
+    private void attachChildEventListener(DatabaseReference messagesRef) {
         messagesRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
@@ -133,10 +162,12 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
                         // Sorting by timestamp
                         Collections.sort(chatHistory, (m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
                         chatAdapter.notifyDataSetChanged();
-                        //adding new snippet for notification to work
-                        if (message.getReceiverID().equals(loggedInUserID)) { // if the current user is the receiver of the message
-                            showNotification(message.getSenderUsername());  // Notify for the received sticker
+
+                        //Sending notification to the user when there is a new message
+                        if (message.getReceiverID().equals(loggedInUserID) && chatHistory.size() > currentMessageCount) {
+                            showNotification(message.getSenderUsername());
                         }
+                        currentMessageCount = chatHistory.size();
                     });
                 }
             }
@@ -160,9 +191,9 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle any errors
             }
+
         });
     }
-
 
     // Method to fetch the username and set it in the Message object
     private void fetchAndSetUserName(Message message, Runnable onComplete) {
@@ -266,8 +297,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_decor))  // This sets the large icon, usually placed to the left of the title & content text
+                .setSmallIcon(R.mipmap.ic_launcher_decor_foreground)
                 .setContentTitle("New Sticker Received")
                 .setContentText(senderName + " sent you a sticker!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
