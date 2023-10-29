@@ -49,7 +49,8 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
     @Override
     public void onBindViewHolder(@NonNull StickerViewHolder holder, int position) {
-        Sticker sticker = stickerList.get(position);
+        Sticker sticker = stickerList.get(holder.getAdapterPosition()); // Use getAdapterPosition()
+
         holder.tvStickerName.setText(sticker.getName());
         holder.tvStickerPrice.setText("$" + sticker.getPrice());
         StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(sticker.getImage());
@@ -60,7 +61,7 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
                 .into(holder.ivStickerItem);
 
         // Check if this sticker is selected
-        if (position == selectedStickerPosition) {
+        if (holder.getAdapterPosition() == selectedStickerPosition) { // Use getAdapterPosition()
             // Implement the visual indication for the selected sticker
             // For example, you can change the background color or border of the selected sticker.
             // You might need to define a different background for selected and unselected stickers.
@@ -74,11 +75,12 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
             // Implement the functionality to select the sticker
             if (sticker != null) {
                 selectedSticker = sticker; // Update the selected sticker
+                selectedStickerPosition = holder.getAdapterPosition(); // Use getAdapterPosition()
                 notifyDataSetChanged(); // Refresh the RecyclerView to update the visuals
             }
         });
-
     }
+
 
     @Override
     public int getItemCount() {
