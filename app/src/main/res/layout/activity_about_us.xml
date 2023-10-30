@@ -14,6 +14,7 @@
         android:text="Project Group 5"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="#800080"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -55,16 +56,19 @@
                 android:id="@+id/nameTextView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Name Placeholder 1"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:text="Name Placeholder 1" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/emailTextView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="Email Placeholder 1" />
+                android:textStyle="italic"
+                android:text="Email Placeholder 1"
+                android:layout_marginTop="8dp"
+                />
 
             <TextView
                 android:id="@+id/nameTextView2"
@@ -72,14 +76,19 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:text="Name Placeholder 2" />
+                android:text="Name Placeholder 2"
+                android:layout_marginTop="16dp"
+                />
 
             <TextView
                 android:id="@+id/emailTextView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="Email Placeholder 2" />
+                android:textStyle="italic"
+                android:text="Email Placeholder 2"
+                android:layout_marginTop="8dp"
+                />
 
             <TextView
                 android:id="@+id/nameTextView3"
@@ -87,14 +96,19 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:text="Name Placeholder 3" />
+                android:text="Name Placeholder 3"
+                android:layout_marginTop="16dp"
+                />
 
             <TextView
                 android:id="@+id/emailTextView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="Email Placeholder 3" />
+                android:textStyle="italic"
+                android:text="Email Placeholder 3"
+                android:layout_marginTop="8dp"
+                />
 
             <TextView
                 android:id="@+id/nameTextView4"
@@ -102,14 +116,19 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:text="Name Placeholder 4" />
+                android:text="Name Placeholder 4"
+                android:layout_marginTop="16dp"
+                />
 
             <TextView
                 android:id="@+id/emailTextView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="Email Placeholder 4" />
+                android:textStyle="italic"
+                android:text="Email Placeholder 4"
+                android:layout_marginTop="8dp"
+                />
 
         </LinearLayout>
     </ScrollView>
