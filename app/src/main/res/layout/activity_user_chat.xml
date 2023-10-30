@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp"
-        app:cardBackgroundColor="#E1D9D1"
+        app:cardBackgroundColor="#E8EAF6"
         app:contentPadding="8dp">
 
     <!-- Horizontal RecyclerView for Stickers -->

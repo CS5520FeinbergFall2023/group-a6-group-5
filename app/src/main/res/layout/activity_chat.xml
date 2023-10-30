@@ -21,8 +21,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="Scroll and check past conversations or add a new one!"
-                android:textSize="18sp"
+                android:text="Open an existing chat"
+                android:textSize="24sp"
                 android:textColor="@android:color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
