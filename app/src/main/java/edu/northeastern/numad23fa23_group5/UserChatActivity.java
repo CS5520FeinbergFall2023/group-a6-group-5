@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -55,6 +57,8 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
     private static final String CHANNEL_ID = "stickerChannel";
 
     private int currentMessageCount = 0;
+    //    private static final String CHANNEL_ID = "stickerChannel";
+    private HashMap<String, Integer> stickerMap = new HashMap<>();
 
 
     @Override
@@ -102,10 +106,24 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
 
 //        Log.d("UserChatActivity", "selectedUserID: " + selectedUserID);
 //        Log.d("UserChatActivity", "loggedInUserID: " + loggedInUserID);
-
+        initializeStickerMap();
         createNotificationChannel();
 
     }
+
+    private void initializeStickerMap() {
+        stickerMap.put("0", R.drawable.image1);
+        stickerMap.put("1", R.drawable.image2);
+        stickerMap.put("2", R.drawable.image3);
+        stickerMap.put("3", R.drawable.image4);
+        stickerMap.put("4", R.drawable.image5);
+        stickerMap.put("5", R.drawable.image6);
+        stickerMap.put("6", R.drawable.image7);
+        stickerMap.put("7", R.drawable.image8);
+        stickerMap.put("8", R.drawable.image9);
+        stickerMap.put("9", R.drawable.image10);
+    }
+
 
     //creating a notification channel
     private void createNotificationChannel() {
@@ -165,7 +183,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
 
                         //Sending notification to the user when there is a new message
                         if (message.getReceiverID().equals(loggedInUserID) && chatHistory.size() > currentMessageCount) {
-                            showNotification(message.getSenderUsername());
+                            showNotification(message.getSenderUsername(), message.getStickerID());
                         }
                         currentMessageCount = chatHistory.size();
                     });
@@ -274,7 +292,6 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
     }
 
 
-
     // Implement the getCurrentTimestamp method as follows
     private String getCurrentTimestamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -283,7 +300,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
     }
 
     //Notification method
-    private void showNotification(String senderName) {
+    private void showNotification(String senderName, String stickerID) {
         Intent intent = new Intent(this, UserChatActivity.class);
         intent.putExtra("loggedInUserID", loggedInUserID);
         intent.putExtra("selectedUserID", selectedUserID);
@@ -296,8 +313,13 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
             pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
+        // Get the resource ID of the sticker using the stickerID
+        int stickerResId = stickerMap.get(stickerID);
+        Bitmap stickerBitmap = BitmapFactory.decodeResource(getResources(), stickerResId);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_decor_foreground)
+                .setLargeIcon(stickerBitmap)
                 .setContentTitle("New Sticker Received")
                 .setContentText(senderName + " sent you a sticker!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -305,7 +327,6 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
                 .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -317,6 +338,7 @@ public class UserChatActivity extends AppCompatActivity implements StickerAdapte
             return;
         }
         notificationManager.notify(1, builder.build());
+    }
 }
 
-}
+

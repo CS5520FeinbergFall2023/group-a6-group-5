@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- res/drawable/selected_sticker_background.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FF5733"/> <!-- Background color for selected sticker -->
+    <solid android:color="#C5CAE9"/> <!-- Background color for selected sticker -->
     <corners android:radius="8dp"/> <!-- Corner radius for the background (adjust as needed) -->
 </shape>
